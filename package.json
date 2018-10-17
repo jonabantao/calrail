@@ -1,0 +1,24 @@
+{
+  "name": "calrail",
+  "version": "1.0.0",
+  "description": "CS340 Final Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonabantao/calrail.git"
+  },
+  "author": "Jonathan Abantao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonabantao/calrail/issues"
+  },
+  "homepage": "https://github.com/jonabantao/calrail#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.4"
+  }
+}
