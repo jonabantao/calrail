@@ -20,7 +20,7 @@ const TerminalManagement = () => {
         </thead>
         <tbody>
           <tr>
-            <td>Sample Station</td>
+            <td>Sample Certification</td>
             <td><button>Delete</button></td>
           </tr>
         </tbody>
