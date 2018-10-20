@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TerminalManagement = () => {
+const CertificationManagement = () => {
   return (
     <section>
       <h2>Certification Management</h2>
@@ -29,4 +29,4 @@ const TerminalManagement = () => {
   );
 };
 
-export default TerminalManagement;
+export default CertificationManagement;
