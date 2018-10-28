@@ -1,9 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const JobView = () => {
   return (
     <section>
       <h1>Job List</h1>
+      <Link to="/jobs">Manange Jobs</Link>
       <table>
         <thead>
           <tr>

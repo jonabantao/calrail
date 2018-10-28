@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <header>
       <div>
-        <h1>CalRail (Now with almost zero CSS styling!)</h1>
+        <h1>CalRail</h1>
       </div>
       <nav>
         <ul>

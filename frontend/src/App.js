@@ -21,7 +21,7 @@ class App extends Component {
     return (
       <Router>
         <React.Fragment>
-          <Navbar herp="herp" />
+          <Navbar />
           <Switch>
             <Route exact path="/" component={JobView} />
             <Route exact path="/jobs" component={JobManagement} />
