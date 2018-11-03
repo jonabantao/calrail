@@ -6,67 +6,28 @@ const app = express();
 
 const PORT = process.env.PORT || 8000;
 const STATIC_PATH = path.join(__dirname, '/frontend/build');
-const queries = require('./backend/queries/query');
-const Terminal = require('./backend/queries/terminal');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(STATIC_PATH));
 
-app.get('/api/jobs', async (req, res) => {
-  try {
-    let response = await queries.fetchJobs();
+// Routes
+const jobs = require('./backend/routes/jobs');
+const employees = require('./backend/routes/employees');
+const trains = require('./backend/routes/trains');
+const terminals = require('./backend/routes/terminals');
 
-    res.status(200).json(response);
-  } catch(e) {
-    res.sendStatus(500);
-  }
-});
+app.use('/api/jobs', jobs);
+app.use('/api/employees', employees);
+app.use('/api/trains', trains);
+app.use('/api/terminals', terminals);
 
-app.get('/api/employees', async (req, res) => {
-  try {
-    let response = await queries.fetchEmployees();
-
-    res.status(200).json(response);
-  } catch (e) {
-    res.sendStatus(500);
-  }
-});
-
-app.get('/api/trains', async (req, res) => {
-  try {
-    let response = await queries.fetchTrains();
-
-    res.status(200).json(response);
-  } catch(e) {
-    res.sendStatus(500);
-  }
-});
-
-app.get('/api/terminals', async (req, res) => {
-  try {
-    let response = await Terminal.findAll();
-
-    res.status(200).json(response);
-  } catch(e) {
-    res.sendStatus(500);
-  }
-})
-
-app.post('/api/trains', async (req, res) => {
-  try {
-    await queries.addTrain(req.body);
-
-    res.sendStatus(200);
-  } catch(e) {
-    res.sendStatus(500);
-  }
-});
-
+// React App
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${STATIC_PATH}/index.html`));
 });
+
 
 app.listen(PORT, () => {
   console.log(`App up on port ${PORT}.`);

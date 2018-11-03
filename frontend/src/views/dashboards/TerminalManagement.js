@@ -52,7 +52,6 @@ class TerminalManagement extends PureComponent {
   }
 
   render() {
-    console.log(this.state.terminals)
     const { classes } = this.props;
     const { terminals, loading, newForm } = this.state;
 

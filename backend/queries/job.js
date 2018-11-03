@@ -1,8 +1,6 @@
 const mysql = require('../config/db-con');
 
-
-
-async function fetchJobs() {
+async function findAll() {
   const constructJobJSON = jobsResult => (
     jobsResult.map((job) => {
       let jsonJob = {};
@@ -62,49 +60,6 @@ async function fetchJobs() {
   }
 }
 
-async function fetchTrains() {
-  try {
-    let trains = await mysql.pool.query(
-      `SELECT id, name, make, model FROM train`
-    );
-
-    return trains;
-  } catch (e) {
-    throw new Error(e);
-  }
-}
-
-async function fetchEmployees() {
-  try {
-    let employees = await mysql.pool.query(
-      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date
-      FROM employee e
-      INNER JOIN terminal h ON h.id = e.home_base_id`
-    );
-
-    return employees;
-  } catch (e) {
-    throw new Error(e);
-  }
-}
-
-async function addTrain(trainInfo) {
-  const { trainId, trainName, trainMake, trainModel } = trainInfo;
-
-  try {
-    await mysql.pool.query(
-      `INSERT INTO train (id, name, make, model)
-      VALUES (?, ?, ?, ?)`,
-      [trainId, trainName, trainMake, trainModel]
-    );
-  } catch(e) {
-    throw new Error(e);
-  }
-}
-
 module.exports = {
-  fetchJobs,
-  fetchEmployees,
-  fetchTrains,
-  addTrain,
-};
+  findAll,
+}
