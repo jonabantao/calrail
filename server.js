@@ -17,11 +17,13 @@ const jobs = require('./backend/routes/jobs');
 const employees = require('./backend/routes/employees');
 const trains = require('./backend/routes/trains');
 const terminals = require('./backend/routes/terminals');
+const certifications = require('./backend/routes/certifications');
 
 app.use('/api/jobs', jobs);
 app.use('/api/employees', employees);
 app.use('/api/trains', trains);
 app.use('/api/terminals', terminals);
+app.use('/api/certifications', certifications);
 
 // React App
 app.get('*', (req, res) => {

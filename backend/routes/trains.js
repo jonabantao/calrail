@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    await queries.addTrain(req.body);
+    await Train.addOne(req.body);
 
     res.sendStatus(200);
   } catch (e) {

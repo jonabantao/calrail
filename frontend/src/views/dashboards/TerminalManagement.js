@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import axios from 'axios';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
+import TerminalForm from '../forms/TerminalForm';
 
 import dashboardStyles from '../../styles/dashboard';
 
@@ -87,6 +88,12 @@ class TerminalManagement extends PureComponent {
               </TableBody>
             </Table>)}
         </Paper>
+        <TerminalForm
+          open={this.state.openModal}
+          handleClose={this.handleClose}
+          newForm={newForm}
+          refreshTable={this.fetchAndStoreTerminals}
+        />
       </Fragment>
     );
   }

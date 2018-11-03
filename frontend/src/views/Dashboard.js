@@ -8,6 +8,7 @@ import JobManagement from './dashboards/JobManagement';
 import EmployeeManagement from './dashboards/EmployeeManagement';
 import TrainManagement from './dashboards/TrainManagement';
 import TerminalManagement from './dashboards/TerminalManagement';
+import CertificationManagement from './dashboards/CertificationManagement';
 import NotFound from './NotFound';
 
 const styles = theme => ({
@@ -46,6 +47,7 @@ const Dashboard = ({ classes, drawerOpen }) => {
           <Route exact path="/employees" component={EmployeeManagement} />
           <Route exact path="/trains" component={TrainManagement} />
           <Route exact path="/terminals" component={TerminalManagement} />
+          <Route exact path="/certifications" component={CertificationManagement} />
           <Route component={NotFound} />
         </Switch>
     </section>

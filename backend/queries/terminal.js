@@ -12,6 +12,22 @@ async function findAll() {
   }
 }
 
+
+async function addOne(terminalInfo) {
+  const { terminalName } = terminalInfo;
+
+  try {
+    await mysql.pool.query(
+      `INSERT INTO terminal (name)
+      VALUES (?)`,
+      [terminalName]
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
+  addOne,
 };

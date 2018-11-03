@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Terminal = require('../queries/terminal');
+const Certification = require('../queries/certification');
 
 router.get('/', async (req, res) => {
   try {
-    let response = await Terminal.findAll();
+    let response = await Certification.findAll();
 
     res.status(200).json(response);
   } catch (e) {
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    await Terminal.addOne(req.body);
+    await Certification.addOne(req.body);
 
     res.sendStatus(200);
   } catch (e) {
