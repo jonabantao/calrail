@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import axios from 'axios';
 
-class TrainForm extends PureComponent {
+class TrainForm extends Component {
   state = {
     trainId: '',
     trainName: '',

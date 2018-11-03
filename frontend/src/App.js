@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/MuiPickersUtilsProvider';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import red from '@material-ui/core/colors/red';
@@ -40,20 +42,22 @@ class App extends Component {
     const { classes } = this.props;
     
     return (
-      <MuiThemeProvider theme={theme}>
-        <Router>
-          <main className={classes.root}>
-            <CssBaseline />
-            <Navbar
-              drawerOpen={this.state.drawerOpen}
-              subdrawerOpen={this.state.subdrawerOpen}
-              handleDrawerToggle={this.handleDrawerToggle}
-              handleSubdrawerToggle={this.handleSubdrawerToggle}
-            />
-            <Dashboard drawerOpen={this.state.drawerOpen} />
-          </main>
-        </Router>
-      </MuiThemeProvider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <MuiThemeProvider theme={theme}>
+          <Router>
+            <main className={classes.root}>
+              <CssBaseline />
+              <Navbar
+                drawerOpen={this.state.drawerOpen}
+                subdrawerOpen={this.state.subdrawerOpen}
+                handleDrawerToggle={this.handleDrawerToggle}
+                handleSubdrawerToggle={this.handleSubdrawerToggle}
+              />
+              <Dashboard drawerOpen={this.state.drawerOpen} />
+            </main>
+          </Router>
+        </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
     );
   }
 }

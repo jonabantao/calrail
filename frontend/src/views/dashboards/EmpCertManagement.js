@@ -13,13 +13,11 @@ import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 import moment from 'moment';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
-import EmpCertManagement from './EmpCertManagement';
 
 import dashboardStyles from '../../styles/dashboard';
-import EmployeeForm from '../forms/EmployeeForm';
 
 
-class EmployeeManagement extends PureComponent {
+class EmpCertManagement extends PureComponent {
   state = {
     employees: [],
     loading: false,
@@ -60,25 +58,14 @@ class EmployeeManagement extends PureComponent {
   }
 
   render() {
-    const { classes } = this.props;
-    const { employees, loading, newForm } = this.state;
-
-    const employeeRows = employees.map(employee => {
-      return (
-        <TableRow key={employee.id}>
-          <TableCell>{employee.id}</TableCell>
-          <TableCell>{employee.fname}</TableCell>
-          <TableCell>{employee.lname}</TableCell>
-          <TableCell>{employee.homebase}</TableCell>
-          <TableCell>{this.formatTime(employee.start_date)}</TableCell>
-        </TableRow>
-      );
-
-    })
+    const { classes, theme } = this.props;
+    const { loading } = this.state;
 
     return (
       <Fragment>
-        <Typography variant="h5">Employee Management</Typography>
+        <Typography variant="h6" style={{ marginTop: theme.spacing.unit * 3 }}>
+          Employees by Certification
+          </Typography>
         <Button
           variant="contained"
           color="primary"
@@ -87,36 +74,24 @@ class EmployeeManagement extends PureComponent {
           onClick={this.handleOpenNew}
         >
           <AddIcon className={classes.iconRight} />
-          Add Employee
-        </Button>
+          Add Certification For Employee
+          </Button>
         <Paper className={classes.root}>
           {loading ? <CircularLoader /> : (
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Employee ID</TableCell>
-                  <TableCell>First Name</TableCell>
-                  <TableCell>Last Name</TableCell>
-                  <TableCell>Homebase</TableCell>
-                  <TableCell>Start Date</TableCell>
+                  <TableCell>Employee Name</TableCell>
+                  <TableCell>Certification Date</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {employeeRows}
               </TableBody>
             </Table>)}
         </Paper>
-        <EmployeeForm
-          open={this.state.openModal}
-          handleClose={this.handleClose}
-          newForm={newForm}
-          refreshTable={this.fetchAndStoreEmployees}
-          formatTime={this.formatTime}
-        />
-        <EmpCertManagement />
       </Fragment>
     );
   }
 }
 
-export default withStyles(dashboardStyles)(EmployeeManagement);
+export default withStyles(dashboardStyles, { withTheme: true })(EmpCertManagement);
