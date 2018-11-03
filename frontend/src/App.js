@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -40,16 +40,6 @@ class App extends Component {
             handleSubdrawerToggle={this.handleSubdrawerToggle}
           />
           <Dashboard drawerOpen={this.state.drawerOpen} />
-          {/*
-            <Route exact path="/employees" component={EmployeeManagement} />
-            <Route exact path="/employees/add" component={AddEmployee} />
-            <Route exact path="/employees/edit" component={EditEmployee} />
-            <Route exact path="/trains" component={TrainManagement} />
-            <Route exact path="/trains/add" component={AddTrain} />
-            <Route exact path="/terminals" component={TerminalManagement} />
-            <Route exact path="/certifications" component={CertificationManagement} />
-            <Route component={NotFound} />
-          </Switch> */}
         </main>
       </Router>
     );

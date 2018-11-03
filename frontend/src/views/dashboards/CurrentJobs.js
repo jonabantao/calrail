@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Assignment';
 
+import CircularLoader from '../../component/ui-loader/CircularLoader';
+
 import axios from 'axios';
 
 const styles = theme => ({
@@ -33,19 +35,28 @@ const styles = theme => ({
 class CurrentJobs extends Component {
   state = {
     jobs: [],
+    loading: false,
   };
 
-  componentDidMount() {
+  fetchAndStoreJobs = () => {
     axios.get('/api/jobs')
-      .then(res => this.setState({ jobs: res.data }));
+      .then(res => this.setState({ 
+        jobs: res.data,
+        loading: false,
+      }))
+      .catch(() => this.setState({ loading: false }));
+  }
+
+  componentDidMount() {
+    this.setState(() => ({ loading: true }), this.fetchAndStoreJobs);
   }
 
   render() {
     const { classes } = this.props;
-    const { jobs } = this.state;
+    const { jobs, loading } = this.state;
 
     const jobRows = jobs.map(job => (
-      <TableRow>
+      <TableRow key={job.id}>
         <TableCell>{job.id}</TableCell>
         <TableCell>{job.train_id}</TableCell>
         <TableCell>{`${job.engineer.fname} ${job.engineer.lname}`}</TableCell>
@@ -73,6 +84,7 @@ class CurrentJobs extends Component {
           Manage Jobs
         </Button>
         <Paper className={classes.root}>
+          {loading ? <CircularLoader /> : (
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -88,9 +100,9 @@ class CurrentJobs extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {jobRows}
+                {jobRows}
             </TableBody>
-          </Table>
+          </Table>)}
         </Paper>
       </Fragment>
     );

@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
+import axios from 'axios';
+import CircularLoader from '../../component/ui-loader/CircularLoader';
 
 const styles = theme => ({
   root: {
@@ -30,17 +32,45 @@ const styles = theme => ({
 });
 
 class JobManagement extends Component {
-  handlePlaceholder() {
-    alert('Clicking on train or employee slots will fire a query to the database and populate available trains or employees.'
-    + ' Implemented during backend.');
+  state = {
+    jobs: [],
+    loading: false,
+  };
+
+  fetchAndStoreJobs = () => {
+    axios.get('/api/jobs')
+      .then(res => this.setState({
+        jobs: res.data,
+        loading: false,
+      }))
+      .catch(() => this.setState({ loading: false }));
+  }
+
+  componentDidMount() {
+    this.setState(() => ({ loading: true }), this.fetchAndStoreJobs);
   }
 
   render() {
     const { classes } = this.props;
+    const { jobs, loading } = this.state;
+
+    const jobRows = jobs.map(job => (
+      <TableRow key={job.id}>
+        <TableCell>{job.id}</TableCell>
+        <TableCell>{job.train_id}</TableCell>
+        <TableCell>{`${job.engineer.fname} ${job.engineer.lname}`}</TableCell>
+        <TableCell>{`${job.conductor.fname} ${job.conductor.lname}`}</TableCell>
+        <TableCell>{`${job.assistant_conductor.fname} ${job.assistant_conductor.lname}`}</TableCell>
+        <TableCell>{job.start_station}</TableCell>
+        <TableCell>{job.end_station}</TableCell>
+        <TableCell>{job.signup_time}</TableCell>
+        <TableCell>{job.signoff_time}</TableCell>
+      </TableRow>
+    ));
 
     return (
       <Fragment>
-        <Typography variant="h5">Job Management</Typography>
+        <Typography variant="h5">Job Management (Edit to be added later)</Typography>
         <Button
           variant="contained"
           color="primary"
@@ -53,6 +83,7 @@ class JobManagement extends Component {
           Add New Job
         </Button>
         <Paper className={classes.root}>
+          {loading ? <CircularLoader /> : (
           <Table className={classes.table}>
             <TableHead>
               <TableRow>
@@ -68,19 +99,9 @@ class JobManagement extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>999</TableCell>
-                <TableCell>999</TableCell>
-                <TableCell>Engineer</TableCell>
-                <TableCell>Conductor</TableCell>
-                <TableCell>Assistant</TableCell>
-                <TableCell>Start Station</TableCell>
-                <TableCell>End Station</TableCell>
-                <TableCell>Signup</TableCell>
-                <TableCell>Signoff</TableCell>
-              </TableRow>
+              {jobRows}
             </TableBody>
-          </Table>
+          </Table>)}
         </Paper>
       </Fragment>
     );
