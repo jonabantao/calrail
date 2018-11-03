@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Assignment';
 
+import axios from 'axios';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -29,9 +31,32 @@ const styles = theme => ({
 });
 
 class JobView extends Component {
+  state = {
+    jobs: [],
+  };
+
+  componentDidMount() {
+    axios.get('/api/jobs')
+      .then(res => this.setState({ jobs: res.data }));
+  }
 
   render() {
     const { classes } = this.props;
+    const { jobs } = this.state;
+
+    const jobRows = jobs.map(job => (
+      <TableRow>
+        <TableCell>{job.id}</TableCell>
+        <TableCell>{job.train_id}</TableCell>
+        <TableCell>{`${job.engineer.fname} ${job.engineer.lname}`}</TableCell>
+        <TableCell>{`${job.conductor.fname} ${job.conductor.lname}`}</TableCell>
+        <TableCell>{`${job.assistant_conductor.fname} ${job.assistant_conductor.lname}`}</TableCell>
+        <TableCell>{job.start_station}</TableCell>
+        <TableCell>{job.end_station}</TableCell>
+        <TableCell>{job.signup_time}</TableCell>
+        <TableCell>{job.signoff_time}</TableCell>
+      </TableRow>
+    ));
 
     return (
       <Fragment>
@@ -63,17 +88,7 @@ class JobView extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell>999</TableCell>
-                <TableCell>999</TableCell>
-                <TableCell>Engineer</TableCell>
-                <TableCell>Conductor</TableCell>
-                <TableCell>Assistant</TableCell>
-                <TableCell>Start Station</TableCell>
-                <TableCell>End Station</TableCell>
-                <TableCell>Signup</TableCell>
-                <TableCell>Signoff</TableCell>
-              </TableRow>
+              {jobRows}
             </TableBody>
           </Table>
         </Paper>
