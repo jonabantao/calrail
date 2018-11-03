@@ -1,137 +1,112 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { PureComponent, Fragment } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
-const sampleEmployees = [
-  {
-    id: 123,
-    firstName: 'John',
-    lastName: 'Doe',
-    homebase: 'San Francisco',
-    certifications: [
-      {
-        certificationName: 'Conductor',
-        certificationDate: '1-28-1902'
-      }
-    ],
-    startDate: '1-1-1900'
-  }, {
-    id: 221,
-    firstName: 'Jane',
-    lastName: 'Doe',
-    homebase: 'San Jose',
-    certifications: [
-      {
-        certificationName: 'Engineer',
-        certificationDate: '3-28-1930'
-      }
-    ],
-    startDate: '2-1-1930',
-  }, {
-    id: 245,
-    firstName: 'Bob',
-    lastName: 'Ross',
-    homebase: 'San Francisco',
-    certifications: [
-      {
-        certificationName: 'Conductor',
-        certificationDate: '1-28-1990'
-      }, {
-        certificationName: 'Engineer',
-        certificationDate: '3-2-1997'
-      }
-    ],
-    startDate: '1-1-1990',
-  }, {
-    id: 258,
-    firstName: 'Charlie',
-    lastName: 'Corn',
-    homebase: 'San Francisco',
-    certifications: [
-      {
-        certificationName: 'Conductor',
-        certificationDate: '1-28-1902'
-      }
-    ],
-    startDate: '1-1-1978',
-  },
-];
+import axios from 'axios';
+import moment from 'moment';
+import CircularLoader from '../../component/ui-loader/CircularLoader';
 
-class EmployeeManagement extends Component {
+import dashboardStyles from '../../styles/dashboard';
+
+
+class EmployeeManagement extends PureComponent {
   state = {
     employees: [],
+    loading: false,
+    new: true,
+    employeeId: null,
+    openModal: false,
   };
 
-  componentDidMount() {
-    this.setState({ employees: sampleEmployees });
+  fetchAndStoreEmployees = () => {
+    this.setState(
+      () => ({ loading: true }),
+      () => axios.get('/api/employees')
+        .then(res => this.setState({
+          employees: res.data,
+          loading: false,
+        }))
+        .catch(() => this.setState({ loading: false }))
+    );
   }
 
-  handleFilter = e => {
-    console.log(!e.target.value);
-    e.preventDefault();
-    
-    if (!e.target.value) {
-      return this.setState({ employees: sampleEmployees });
-    }
+  componentDidMount() {
+    this.fetchAndStoreEmployees();
+  }
 
-    const filteredEmployees = sampleEmployees
-      .filter(employee => employee.certifications
-        .some(cert => cert.certificationName === e.target.value));
+  handleOpenNew = () => {
+    this.setState({
+      newForm: true,
+      openModal: true,
+    });
+  }
 
-    return this.setState({ employees: filteredEmployees });
-  };
+  handleClose = () => {
+    this.setState({ openModal: false });
+  }
+
+  formatTime = (timeString) => {
+    return moment(timeString).format('MM-DD-YYYY');
+  }
 
   render() {
-    const employeeList = this.state.employees.map(employee => {
+    const { classes } = this.props;
+    const { employees, loading, newForm } = this.state;
+
+    const employeeRows = employees.map(employee => {
       return (
-        <tr key={employee.id}>
-          <td>{employee.id}</td>
-          <td>{employee.firstName}</td>
-          <td>{employee.lastName}</td>
-          <td>{employee.homebase}</td>
-          <td>
-            <ul>
-              {employee.certifications.map(cert => <li key={cert.certificationName}>{cert.certificationName}</li>)}
-            </ul>
-          </td>
-          <td>{employee.startDate}</td>
-          <td>
-            <Link to="/employees/edit">Edit</Link>
-            <button>Remove</button>
-          </td>
-        </tr>
+        <TableRow key={employee.id}>
+          <TableCell>{employee.id}</TableCell>
+          <TableCell>{employee.fname}</TableCell>
+          <TableCell>{employee.lname}</TableCell>
+          <TableCell>{employee.homebase}</TableCell>
+          <TableCell>{this.formatTime(employee.start_date)}</TableCell>
+        </TableRow>
       );
+
     })
 
     return (
-      <section>
-        <h2>Employee Management</h2>
-        <Link to="/employees/add">Register New Employee</Link>
-        <div>
-          <label htmlFor="">Filter By Certifications</label>
-          <select name="" id="" onChange={this.handleFilter}>
-            <option value="">All Employees</option>
-            <option value="Conductor">Conductors</option>
-            <option value="Engineer">Engineers</option>
-          </select>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Emp ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Home Base</th>
-              <th>Certifications</th>
-              <th>Start Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {employeeList}
-          </tbody>
-        </table>
-      </section>
+      <Fragment>
+        <Typography variant="h5">Employee Management</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.button}
+          onClick={this.handleOpenNew}
+        >
+          <AddIcon className={classes.iconRight} />
+          Add Employee
+        </Button>
+        <Paper className={classes.root}>
+          {loading ? <CircularLoader /> : (
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Employee ID</TableCell>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Last Name</TableCell>
+                  <TableCell>Homebase</TableCell>
+                  <TableCell>Start Date</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {employeeRows}
+              </TableBody>
+            </Table>)}
+        </Paper>
+      </Fragment>
     );
   }
 }
 
-export default EmployeeManagement;
+export default withStyles(dashboardStyles)(EmployeeManagement);

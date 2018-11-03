@@ -19,7 +19,17 @@ app.get('/api/jobs', async (req, res) => {
 
     res.status(200).json(response);
   } catch(e) {
-    res.sendStatus(404);
+    res.sendStatus(500);
+  }
+});
+
+app.get('/api/employees', async (req, res) => {
+  try {
+    let response = await queries.fetchEmployees();
+
+    res.status(200).json(response);
+  } catch (e) {
+    res.sendStatus(500);
   }
 });
 

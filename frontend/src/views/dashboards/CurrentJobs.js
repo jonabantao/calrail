@@ -14,23 +14,9 @@ import EditIcon from '@material-ui/icons/Assignment';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
 
 import axios from 'axios';
+import moment from 'moment';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  iconRight: {
-    marginRight: theme.spacing.unit,
-  }
-});
+import dashboardStyles from '../../styles/dashboard';
 
 class CurrentJobs extends Component {
   state = {
@@ -51,6 +37,10 @@ class CurrentJobs extends Component {
     this.setState(() => ({ loading: true }), this.fetchAndStoreJobs);
   }
 
+  formatHours = (hourString) => {
+    return moment(hourString, 'HH:mm:ss').format('HHmm');
+  }
+
   render() {
     const { classes } = this.props;
     const { jobs, loading } = this.state;
@@ -64,8 +54,8 @@ class CurrentJobs extends Component {
         <TableCell>{`${job.assistant_conductor.fname} ${job.assistant_conductor.lname}`}</TableCell>
         <TableCell>{job.start_station}</TableCell>
         <TableCell>{job.end_station}</TableCell>
-        <TableCell>{job.signup_time}</TableCell>
-        <TableCell>{job.signoff_time}</TableCell>
+        <TableCell>{this.formatHours(job.signup_time)}</TableCell>
+        <TableCell>{this.formatHours(job.signoff_time)}</TableCell>
       </TableRow>
     ));
 
@@ -109,4 +99,4 @@ class CurrentJobs extends Component {
   }
 }
 
-export default withStyles(styles)(CurrentJobs);
+export default withStyles(dashboardStyles)(CurrentJobs);

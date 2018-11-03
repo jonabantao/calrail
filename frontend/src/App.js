@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import red from '@material-ui/core/colors/red';
+import grey from '@material-ui/core/colors/grey';
 
 import Navbar from './views/Navbar';
 import Dashboard from './views/Dashboard';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: red,
+    secondary: grey,
+  }
+});
 
 const styles = theme => ({
   root: {
@@ -30,18 +40,20 @@ class App extends Component {
     const { classes } = this.props;
     
     return (
-      <Router>
-        <main className={classes.root}>
-          <CssBaseline />
-          <Navbar
-            drawerOpen={this.state.drawerOpen}
-            subdrawerOpen={this.state.subdrawerOpen}
-            handleDrawerToggle={this.handleDrawerToggle}
-            handleSubdrawerToggle={this.handleSubdrawerToggle}
-          />
-          <Dashboard drawerOpen={this.state.drawerOpen} />
-        </main>
-      </Router>
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <main className={classes.root}>
+            <CssBaseline />
+            <Navbar
+              drawerOpen={this.state.drawerOpen}
+              subdrawerOpen={this.state.subdrawerOpen}
+              handleDrawerToggle={this.handleDrawerToggle}
+              handleSubdrawerToggle={this.handleSubdrawerToggle}
+            />
+            <Dashboard drawerOpen={this.state.drawerOpen} />
+          </main>
+        </Router>
+      </MuiThemeProvider>
     );
   }
 }

@@ -1,24 +1,10 @@
 const mysql = require('../config/db-con');
 
-async function fetchJobs() {
-  try {
-    let jobs = await mysql.pool.query(
-      `SELECT eng.id eng_id, eng.fname eng_fname, eng.lname eng_lname,
-      con.id con_id, con.fname con_fname, con.lname con_lname,
-      ac.id ac_id, ac.fname ac_fname, ac.lname ac_lname,
-      start.name start_station, end.name end_station,
-      train.id train_id,
-      j.id, j.signup_time, j.signoff_time
-    FROM job j
-    INNER JOIN employee eng ON eng.id = j.engineer_id
-    INNER JOIN employee con ON con.id = j.conductor_id
-    INNER JOIN employee ac ON ac.id = j.assistant_conductor_id
-    INNER JOIN terminal start ON start.id = j.start_station_id
-    INNER JOIN terminal end ON end.id = j.end_station_id
-    INNER JOIN train ON train.id = j.train_id`
-    )
 
-    jobs = jobs.map((job) => {
+
+async function fetchJobs() {
+  const constructJobJSON = jobsResult => (
+    jobsResult.map((job) => {
       let jsonJob = {};
 
       jsonJob.id = job.id;
@@ -29,7 +15,7 @@ async function fetchJobs() {
         fname: job.eng_fname,
         lname: job.eng_lname,
       }
-      
+
       jsonJob.conductor = {
         id: job.con_id,
         fname: job.con_fname,
@@ -48,7 +34,27 @@ async function fetchJobs() {
       jsonJob.signoff_time = job.signoff_time;
 
       return jsonJob;
-    });
+    })
+  );
+
+  try {
+    let jobs = await mysql.pool.query(
+      `SELECT eng.id eng_id, eng.fname eng_fname, eng.lname eng_lname,
+      con.id con_id, con.fname con_fname, con.lname con_lname,
+      ac.id ac_id, ac.fname ac_fname, ac.lname ac_lname,
+      start.name start_station, end.name end_station,
+      train.id train_id,
+      j.id, j.signup_time, j.signoff_time
+      FROM job j
+      INNER JOIN employee eng ON eng.id = j.engineer_id
+      INNER JOIN employee con ON con.id = j.conductor_id
+      INNER JOIN employee ac ON ac.id = j.assistant_conductor_id
+      INNER JOIN terminal start ON start.id = j.start_station_id
+      INNER JOIN terminal end ON end.id = j.end_station_id
+      INNER JOIN train ON train.id = j.train_id`
+    )
+
+    jobs = constructJobJSON(jobs);
 
     return jobs;
   } catch (e) {
@@ -70,12 +76,13 @@ async function fetchTrains() {
 
 async function fetchEmployees() {
   try {
-    let workouts = await mysql.pool.query(
-      `SELECT *
-      FROM employee`
+    let employees = await mysql.pool.query(
+      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date
+      FROM employee e
+      INNER JOIN terminal h ON h.id = e.home_base_id`
     );
 
-    return workouts;
+    return employees;
   } catch (e) {
     throw new Error(e);
   }

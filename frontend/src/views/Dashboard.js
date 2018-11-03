@@ -5,8 +5,9 @@ import classNames from 'classnames';
 
 import CurrentJobs from './dashboards/CurrentJobs';
 import JobManagement from './dashboards/JobManagement';
-import NotFound from './NotFound';
+import EmployeeManagement from './dashboards/EmployeeManagement';
 import TrainManagement from './dashboards/TrainManagement';
+import NotFound from './NotFound';
 
 const styles = theme => ({
   drawerHeader: {
@@ -40,6 +41,7 @@ const Dashboard = ({ classes, drawerOpen }) => {
         <div className={classes.drawerHeader} />
         <Switch>
           <Route exact path="/" component={CurrentJobs} />
+          <Route exact path="/employees" component={EmployeeManagement} />
           <Route exact path="/jobs" component={JobManagement} />
           <Route exact path="/trains" component={TrainManagement} />
           <Route component={NotFound} />

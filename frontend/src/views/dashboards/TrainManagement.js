@@ -14,22 +14,7 @@ import axios from 'axios';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
 import TrainForm from '../forms/TrainForm';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-  },
-  button: {
-    margin: theme.spacing.unit,
-  },
-  iconRight: {
-    marginRight: theme.spacing.unit,
-  }
-});
+import dashboardStyles from '../../styles/dashboard';
 
 class TrainManagement extends PureComponent {
   state = {
@@ -120,4 +105,4 @@ class TrainManagement extends PureComponent {
   }
 }
 
-export default withStyles(styles)(TrainManagement);
+export default withStyles(dashboardStyles)(TrainManagement);
