@@ -14,6 +14,21 @@ async function findAll() {
   }
 }
 
+async function addOne(empInfo) {
+  const { employeeFName, employeeLName, employeeHomeId, employeeStartDate } = empInfo;
+
+  try {
+    await mysql.pool.query(
+      `INSERT INTO employee (fname, lname, home_base_id, start_date)
+      VALUES (?, ?, ?, ?)`,
+      [employeeFName, employeeLName, employeeHomeId, employeeStartDate]
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
+  addOne,
 };
