@@ -21,6 +21,26 @@ app.get('/api/jobs', async (req, res) => {
   } catch(e) {
     res.sendStatus(404);
   }
+});
+
+app.get('/api/trains', async (req, res) => {
+  try {
+    let response = await queries.fetchTrains();
+
+    res.status(200).json(response);
+  } catch(e) {
+    res.sendStatus(500);
+  }
+});
+
+app.post('/api/trains', async (req, res) => {
+  try {
+    await queries.addTrain(req.body);
+
+    res.sendStatus(200);
+  } catch(e) {
+    res.sendStatus(500);
+  }
 })
 
 app.get('*', (req, res) => {

@@ -1,36 +1,123 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { PureComponent, Fragment } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
-class TrainManagement extends Component {
+import axios from 'axios';
+import CircularLoader from '../../component/ui-loader/CircularLoader';
+import TrainForm from '../forms/TrainForm';
+
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  iconRight: {
+    marginRight: theme.spacing.unit,
+  }
+});
+
+class TrainManagement extends PureComponent {
+  state = {
+    trains: [],
+    loading: false,
+    new: true,
+    trainId: null,
+    openModal: false,
+  };
+
+  fetchAndStoreTrains = () => {
+    this.setState(
+      () => ({ loading: true }),
+      () => axios.get('/api/trains')
+        .then(res => this.setState({
+          trains: res.data,
+          loading: false,
+        }))
+        .catch(() => this.setState({ loading: false }))
+    );
+  }
+
+  componentDidMount() {
+    this.fetchAndStoreTrains();
+  }
+
+  handleOpenNew = () => {
+    this.setState({
+      newForm: true,
+      openModal: true,
+    });
+  }
+
+  handleClose = () => {
+    this.setState({ openModal: false });
+  }
+
   render() {
+    const { classes } = this.props;
+    const { trains, loading, newForm } = this.state;
+
+    const trainRows = trains.map(train => (
+      <TableRow key={train.id}>
+        <TableCell>{train.id}</TableCell>
+        <TableCell>{train.name}</TableCell>
+        <TableCell>{train.make}</TableCell>
+        <TableCell>{train.model}</TableCell>
+      </TableRow>
+    ));
+
     return (
-      <section>
-        <h2>Train Management</h2>
-        <Link to="/trains/add">Register New Train</Link>
-        <table>
-          <thead>
-            <tr>
-              <th>Train (Engine) ID</th>
-              <th>Name</th>
-              <th>Make</th>
-              <th>Model</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>999</td>
-              <td>TSM</td>
-              <td>Trainmaker</td>
-              <td>Sample Model</td>
-              <td>
-                <button>Remove</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+      <Fragment>
+        <Typography variant="h5">Train Management</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.button}
+          onClick={this.handleOpenNew}
+        >
+          <AddIcon className={classes.iconRight} />
+          Register New Train
+        </Button>
+        <Paper className={classes.root}>
+          {loading ? <CircularLoader /> : (
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Train ID</TableCell>
+                  <TableCell>Designation</TableCell>
+                  <TableCell>Make</TableCell>
+                  <TableCell>Model</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {trainRows}
+              </TableBody>
+            </Table>)}
+        </Paper>
+        <TrainForm
+          open={this.state.openModal}
+          handleClose={this.handleClose}
+          newForm={newForm}
+          refreshTable={this.fetchAndStoreTrains}
+        />
+      </Fragment>
     );
   }
 }
 
-export default TrainManagement;
+export default withStyles(styles)(TrainManagement);

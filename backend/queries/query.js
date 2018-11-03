@@ -56,6 +56,18 @@ async function fetchJobs() {
   }
 }
 
+async function fetchTrains() {
+  try {
+    let trains = await mysql.pool.query(
+      `SELECT id, name, make, model FROM train`
+    );
+
+    return trains;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 async function fetchEmployees() {
   try {
     let workouts = await mysql.pool.query(
@@ -69,7 +81,23 @@ async function fetchEmployees() {
   }
 }
 
+async function addTrain(trainInfo) {
+  const { trainId, trainName, trainMake, trainModel } = trainInfo;
+
+  try {
+    await mysql.pool.query(
+      `INSERT INTO train (id, name, make, model)
+      VALUES (?, ?, ?, ?)`,
+      [trainId, trainName, trainMake, trainModel]
+    );
+  } catch(e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   fetchJobs,
   fetchEmployees,
+  fetchTrains,
+  addTrain,
 };
