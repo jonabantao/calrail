@@ -7,6 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 const STATIC_PATH = path.join(__dirname, '/frontend/build');
 const queries = require('./backend/queries/query');
+const Terminal = require('./backend/queries/terminal');
 
 // Middleware
 app.use(cors());
@@ -43,6 +44,16 @@ app.get('/api/trains', async (req, res) => {
   }
 });
 
+app.get('/api/terminals', async (req, res) => {
+  try {
+    let response = await Terminal.findAll();
+
+    res.status(200).json(response);
+  } catch(e) {
+    res.sendStatus(500);
+  }
+})
+
 app.post('/api/trains', async (req, res) => {
   try {
     await queries.addTrain(req.body);
@@ -51,7 +62,7 @@ app.post('/api/trains', async (req, res) => {
   } catch(e) {
     res.sendStatus(500);
   }
-})
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${STATIC_PATH}/index.html`));
