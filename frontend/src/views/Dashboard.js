@@ -3,10 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 
-import JobView from '../component/JobView';
-import JobManagement from '../component/JobManagement';
-import AddJob from '../component/JobManagement/AddJob';
-import NotFound from '../component/NotFound';
+import CurrentJobs from './dashboards/CurrentJobs';
+import JobManagement from './dashboards/JobManagement';
+import NotFound from './NotFound';
 
 const styles = theme => ({
   drawerHeader: {
@@ -39,9 +38,8 @@ const Dashboard = ({ classes, drawerOpen }) => {
     <section className={classNames(classes.content, { [classes.contentShift]: !drawerOpen })}>
         <div className={classes.drawerHeader} />
         <Switch>
-          <Route exact path="/" component={JobView} />
+          <Route exact path="/" component={CurrentJobs} />
           <Route exact path="/jobs" component={JobManagement} />
-          <Route exact path="/jobs/new" component={AddJob} />
           <Route component={NotFound} />
         </Switch>
     </section>

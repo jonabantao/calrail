@@ -30,7 +30,7 @@ const styles = theme => ({
   }
 });
 
-class JobView extends Component {
+class CurrentJobs extends Component {
   state = {
     jobs: [],
   };
@@ -97,4 +97,4 @@ class JobView extends Component {
   }
 }
 
-export default withStyles(styles)(JobView);
+export default withStyles(styles)(CurrentJobs);

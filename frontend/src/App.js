@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import Navbar from './component/Navbar';
-import Dashboard from './component/Dashboard';
+import Navbar from './views/Navbar';
+import Dashboard from './views/Dashboard';
 
 const styles = theme => ({
   root: {

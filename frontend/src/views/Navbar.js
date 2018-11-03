@@ -17,7 +17,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import ListItemLink from '../component/ListItemLink';
+import ListItemLink from '../component/list/ListItemLink';
 
 
 const styles = theme => ({
