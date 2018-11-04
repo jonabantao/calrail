@@ -14,6 +14,40 @@ async function findAll() {
   }
 }
 
+async function findAllEngineers() {
+  try {
+    let engineers = await mysql.pool.query(
+      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title
+      FROM employee e
+      INNER JOIN terminal h ON h.id = e.home_base_id
+      INNER JOIN employee_certification ec ON ec.employee_id = e.id
+      INNER JOIN certification c ON c.id = ec.certification_id
+      WHERE c.title = 'Engineer'`
+    );
+
+    return engineers;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
+async function findAllConductors() {
+  try {
+    let conductors = await mysql.pool.query(
+      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title
+      FROM employee e
+      INNER JOIN terminal h ON h.id = e.home_base_id
+      INNER JOIN employee_certification ec ON ec.employee_id = e.id
+      INNER JOIN certification c ON c.id = ec.certification_id
+      WHERE c.title = 'Conductor'`
+    );
+
+    return conductors;
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 async function findAllWithCertifications() {
   try {
     let employeesWithCertifications = await mysql.pool.query(
@@ -60,6 +94,8 @@ async function addCertification(empCertInfo) {
 module.exports = {
   findAll,
   findAllWithCertifications,
+  findAllEngineers,
+  findAllConductors,
   addOne,
   addCertification,
 };

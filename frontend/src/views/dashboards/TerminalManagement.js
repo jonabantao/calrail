@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -16,7 +16,7 @@ import TerminalForm from '../forms/TerminalForm';
 
 import dashboardStyles from '../../styles/dashboard';
 
-class TerminalManagement extends PureComponent {
+class TerminalManagement extends Component {
   state = {
     terminals: [],
     loading: false,

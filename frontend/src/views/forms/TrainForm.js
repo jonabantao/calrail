@@ -29,8 +29,9 @@ class TrainForm extends Component {
     const trainInfo = Object.assign({}, this.state);
 
     axios.post('/api/trains/', trainInfo)
-      .then(this.props.handleClose)
-      .then(this.props.refreshTable);
+      .then(this.handleClose)
+      .then(this.props.refreshTable)
+      .catch(console.error);
   }
   
   handleClose = () => {

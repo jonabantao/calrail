@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,14 +14,13 @@ import CalendarIcon from '@material-ui/icons/CalendarToday';
 import moment from 'moment';
 import axios from 'axios';
 
-class EmpCertForm extends PureComponent {
+class EmpCertForm extends Component {
   state = {
     employeeId: '',
     certificationId: '',
     certificationDate: null,
     employeeList: [],
     certList: [],
-    disableButtons: false,
   };
 
   componentDidMount() {
@@ -45,20 +44,18 @@ class EmpCertForm extends PureComponent {
       employeeId: '',
       certificationId: '',
       certificationDate: null,
-      employeeList: [],
-      certList: [],
-      disableButtons: false,
     })
   }
 
   handleSave = () => {
-    let { employeeList, certList, disableButtons, ...empCertInfo } = this.state;
+    let { employeeList, certList, ...empCertInfo } = this.state;
     empCertInfo.certificationDate = this.formatTime(empCertInfo.certificationDate);
 
-    this.setState(() => ({ disableButtons: true }),
-      () => axios.post('/api/employees/certifications', empCertInfo)
-        .then(this.props.handleClose)
-        .then(this.props.refreshTable));
+
+    axios.post('/api/employees/certifications', empCertInfo)
+        .then(this.handleClose)
+        .then(this.props.refreshTable)
+        .catch(console.error);
   }
 
   handleClose = () => {
@@ -140,7 +137,6 @@ class EmpCertForm extends PureComponent {
             variant="contained"
             color="primary"
             onClick={this.handleSave}
-            disabled={this.state.disableButtons}
           >
             Save
         </Button>
@@ -148,7 +144,6 @@ class EmpCertForm extends PureComponent {
             variant="contained"
             color="secondary"
             onClick={this.handleClose}
-            disabled={this.state.disableButtons}
           >
             Cancel
         </Button>

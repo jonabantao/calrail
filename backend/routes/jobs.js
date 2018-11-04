@@ -12,4 +12,14 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/', async (req, res) => {
+  try {
+    await Job.addOne(req.body);
+
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+})
+
 module.exports = router;

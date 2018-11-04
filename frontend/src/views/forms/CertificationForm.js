@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import axios from 'axios';
 
-class CertificationForm extends PureComponent {
+class CertificationForm extends Component {
   state = {
     certificationTitle: ''
   };
@@ -23,7 +23,7 @@ class CertificationForm extends PureComponent {
     const certInfo = Object.assign({}, this.state);
 
     axios.post('/api/certifications/', certInfo)
-      .then(this.props.handleClose)
+      .then(this.handleClose)
       .then(this.props.refreshTable)
       .catch(console.error);
   }

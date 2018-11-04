@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -16,11 +15,15 @@ import moment from 'moment';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
 
 import dashboardStyles from '../../styles/dashboard';
+import JobForm from '../forms/JobForm';
 
 class JobManagement extends Component {
   state = {
     jobs: [],
     loading: false,
+    new: true,
+    employeeId: null,
+    openModal: false,
   };
 
   fetchAndStoreJobs = () => {
@@ -39,6 +42,15 @@ class JobManagement extends Component {
   formatHours = (hourString) => {
     return moment(hourString, 'HH:mm:ss').format('HHmm');
   }
+
+  handleOpen = () => {
+    this.setState({ openModal: true });
+  }
+
+  handleClose = () => {
+    this.setState({ openModal: false });
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -65,9 +77,8 @@ class JobManagement extends Component {
           variant="contained"
           color="primary"
           size="large"
-          component={Link}
-          to="/jobs/new"
           className={classes.button}
+          onClick={this.handleOpen}
         >
           <AddIcon className={classes.iconRight} />
           Add New Job
@@ -93,6 +104,11 @@ class JobManagement extends Component {
             </TableBody>
           </Table>)}
         </Paper>
+        <JobForm 
+          open={this.state.openModal}
+          handleClose={this.handleClose}
+          refreshTable={this.fetchAndStoreJobs}
+        />
       </Fragment>
     );
   }

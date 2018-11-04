@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -14,14 +14,13 @@ import CalendarIcon from '@material-ui/icons/CalendarToday';
 import axios from 'axios';
 import moment from 'moment';
 
-class EmployeeForm extends PureComponent {
+class EmployeeForm extends Component {
   state = {
     employeeFName: '',
     employeeLName: '',
     employeeHomeId: '',
     employeeStartDate: null,
     homebaseOptions: [],
-    disableButtons: false,
   };
 
   componentDidMount() {
@@ -36,8 +35,6 @@ class EmployeeForm extends PureComponent {
       employeeLName: '',
       employeeHomeId: '',
       employeeStartDate: null,
-      homebaseOptions: [],
-      disableButtons: false,
     })
   }
 
@@ -46,10 +43,10 @@ class EmployeeForm extends PureComponent {
     delete empInfo.homebaseOptions;
     empInfo.employeeStartDate = moment(empInfo.employeeStartDate).format('YYYY-MM-DD');
 
-    this.setState(() => ({ disableButtons: true }),
-      () => axios.post('/api/employees/', empInfo)
-        .then(this.props.handleClose)
-        .then(this.props.refreshTable));
+    axios.post('/api/employees/', empInfo)
+        .then(this.handleClose)
+        .then(this.props.refreshTable)
+        .catch(console.error);
   }
 
   handleClose = () => {
@@ -126,7 +123,6 @@ class EmployeeForm extends PureComponent {
             variant="contained"
             color="primary"
             onClick={this.handleSave}
-            disabled={this.state.disableButtons}
           >
             Save
         </Button>
@@ -134,7 +130,6 @@ class EmployeeForm extends PureComponent {
             variant="contained"
             color="secondary"
             onClick={this.handleClose}
-            disabled={this.state.disableButtons}
           >
             Cancel
         </Button>

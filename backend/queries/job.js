@@ -60,6 +60,26 @@ async function findAll() {
   }
 }
 
+async function addOne(jobInfo) {
+  const { jobId, trainId, engineerId, conductorId, assistantConductorId, startStationId,
+    endStationId, signupTime, signoffTime } = jobInfo;
+
+  try {
+    await mysql.pool.query(
+      `INSERT INTO job 
+      (id, train_id, engineer_id, conductor_id, assistant_conductor_id, start_station_id,
+        end_station_id, signup_time, signoff_time)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [jobId, trainId, engineerId, conductorId, assistantConductorId, startStationId,
+      endStationId, signupTime, signoffTime]
+    );
+  } catch (e) {
+    console.log(e);
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
+  addOne,
 }

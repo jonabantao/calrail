@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -19,7 +19,7 @@ import dashboardStyles from '../../styles/dashboard';
 import EmployeeForm from '../forms/EmployeeForm';
 
 
-class EmployeeManagement extends PureComponent {
+class EmployeeManagement extends Component {
   state = {
     employees: [],
     loading: false,

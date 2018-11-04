@@ -22,6 +22,26 @@ router.get('/certifications', async (req, res) => {
   }
 });
 
+router.get('/engineers', async (req, res) => {
+  try {
+    let response = await Employee.findAllEngineers();
+
+    res.status(200).json(response);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+router.get('/conductors', async (req, res) => {
+  try {
+    let response = await Employee.findAllConductors();
+
+    res.status(200).json(response);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     await Employee.addOne(req.body);
