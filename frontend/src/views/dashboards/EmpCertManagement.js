@@ -15,23 +15,23 @@ import moment from 'moment';
 import CircularLoader from '../../component/ui-loader/CircularLoader';
 
 import dashboardStyles from '../../styles/dashboard';
+import EmpCertForm from '../forms/EmpCertForm';
 
 
 class EmpCertManagement extends PureComponent {
   state = {
-    employees: [],
+    employeesCerts: [],
     loading: false,
-    new: true,
     employeeId: null,
     openModal: false,
   };
 
-  fetchAndStoreEmployees = () => {
+  fetchAndStoreEmployeesCerts = () => {
     this.setState(
       () => ({ loading: true }),
-      () => axios.get('/api/employees')
+      () => axios.get('/api/employees/certifications')
         .then(res => this.setState({
-          employees: res.data,
+          employeesCerts: res.data,
           loading: false,
         }))
         .catch(() => this.setState({ loading: false }))
@@ -39,7 +39,7 @@ class EmpCertManagement extends PureComponent {
   }
 
   componentDidMount() {
-    this.fetchAndStoreEmployees();
+    this.fetchAndStoreEmployeesCerts();
   }
 
   handleOpenNew = () => {
@@ -59,7 +59,17 @@ class EmpCertManagement extends PureComponent {
 
   render() {
     const { classes, theme } = this.props;
-    const { loading } = this.state;
+    const { loading, employeesCerts } = this.state;
+
+    const employeesAndCerts = employeesCerts.map(empCert => {
+      return (
+        <TableRow key={`${empCert.full_name}${empCert.title}`}>
+          <TableCell>{empCert.full_name}</TableCell>
+          <TableCell>{empCert.title}</TableCell>
+          <TableCell>{this.formatTime(empCert.certification_date)}</TableCell>
+        </TableRow>
+      );
+    });
 
     return (
       <Fragment>
@@ -82,13 +92,20 @@ class EmpCertManagement extends PureComponent {
               <TableHead>
                 <TableRow>
                   <TableCell>Employee Name</TableCell>
+                  <TableCell>Certification Title</TableCell>
                   <TableCell>Certification Date</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
+                {employeesAndCerts}
               </TableBody>
             </Table>)}
         </Paper>
+        <EmpCertForm
+          open={this.state.openModal}
+          handleClose={this.handleClose}
+          refreshTable={this.fetchAndStoreEmployeesCerts}
+        />
       </Fragment>
     );
   }

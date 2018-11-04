@@ -12,9 +12,29 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/certifications', async (req, res) => {
+  try {
+    let response = await Employee.findAllWithCertifications();
+
+    res.status(200).json(response);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     await Employee.addOne(req.body);
+
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+router.post('/certifications', async (req, res) => {
+  try {
+    await Employee.addCertification(req.body);
 
     res.sendStatus(200);
   } catch (e) {

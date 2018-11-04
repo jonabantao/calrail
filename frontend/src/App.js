@@ -18,7 +18,7 @@ const theme = createMuiTheme({
   }
 });
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     display: 'flex',
   }
