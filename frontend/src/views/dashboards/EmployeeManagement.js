@@ -51,6 +51,20 @@ class EmployeeManagement extends Component {
     });
   }
 
+  handleDelete = empID => () => {
+    axios.delete(`/api/employees/${empID}`)
+      .then(this.fetchAndStoreEmployees)
+      .catch(() => {
+        if (this.state.loading) {
+          this.setState({ loading: false });
+        }
+      })
+  }
+
+  handleEdit = empID => () => {
+    alert('Under construction!');
+  }
+
   handleClose = () => {
     this.setState({ openModal: false });
   }
@@ -62,6 +76,7 @@ class EmployeeManagement extends Component {
   render() {
     const { classes } = this.props;
     const { employees, loading, newForm } = this.state;
+    const employeeCount = this.state.employees.length;
 
     const employeeRows = employees.map(employee => {
       return (
@@ -71,6 +86,23 @@ class EmployeeManagement extends Component {
           <TableCell>{employee.lname}</TableCell>
           <TableCell>{employee.homebase}</TableCell>
           <TableCell>{this.formatTime(employee.start_date)}</TableCell>
+          <TableCell>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={this.handleEdit(employee.id)}
+              style={{ marginRight: 16 }}
+            >
+              Edit
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.handleDelete(employee.id)}
+            >
+              Fire
+            </Button>
+          </TableCell>
         </TableRow>
       );
 
@@ -99,6 +131,7 @@ class EmployeeManagement extends Component {
                   <TableCell>Last Name</TableCell>
                   <TableCell>Homebase</TableCell>
                   <TableCell>Start Date</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -113,7 +146,9 @@ class EmployeeManagement extends Component {
           refreshTable={this.fetchAndStoreEmployees}
           formatTime={this.formatTime}
         />
-        <EmpCertManagement />
+        <EmpCertManagement
+          empCount={employeeCount}
+        />
       </Fragment>
     );
   }

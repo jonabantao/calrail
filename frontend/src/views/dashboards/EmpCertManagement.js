@@ -42,6 +42,12 @@ class EmpCertManagement extends Component {
     this.fetchAndStoreEmployeesCerts();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.empCount < prevProps.empCount) {
+      this.fetchAndStoreEmployeesCerts();
+    }
+  }
+
   handleOpenNew = () => {
     this.setState({
       newForm: true,
@@ -58,6 +64,7 @@ class EmpCertManagement extends Component {
   }
 
   render() {
+    console.log('renders');
     const { classes, theme } = this.props;
     const { loading, employeesCerts } = this.state;
 

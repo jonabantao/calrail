@@ -62,4 +62,15 @@ router.post('/certifications', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    await Employee.deleteOne(req.params.id);
+
+    res.sendStatus(200)
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

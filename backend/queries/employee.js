@@ -91,6 +91,18 @@ async function addCertification(empCertInfo) {
   }
 }
 
+async function deleteOne(empId) {
+  try {
+    await mysql.pool.query(
+      `DELETE FROM employee
+      WHERE id = ?`,
+      empId
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
   findAllWithCertifications,
@@ -98,4 +110,5 @@ module.exports = {
   findAllConductors,
   addOne,
   addCertification,
+  deleteOne,
 };
