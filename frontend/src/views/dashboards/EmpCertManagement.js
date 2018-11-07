@@ -101,11 +101,11 @@ class EmpCertManagement extends Component {
               </TableBody>
             </Table>)}
         </Paper>
-        <EmpCertForm
+        {this.state.openModal && <EmpCertForm
           open={this.state.openModal}
           handleClose={this.handleClose}
           refreshTable={this.fetchAndStoreEmployeesCerts}
-        />
+        />}
       </Fragment>
     );
   }
