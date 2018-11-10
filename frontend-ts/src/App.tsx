@@ -1,14 +1,26 @@
 import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, createStyles, MuiThemeProvider, withStyles, WithStyles } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  createStyles,
+  MuiThemeProvider,
+  withStyles,
+  WithStyles 
+} from '@material-ui/core/styles';
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import DashboardRouter from './components/DashboardRouter';
+import NavBar from './view/header/NavBar';
 
 const theme = createMuiTheme({
   palette: {
     primary: red,
     secondary: grey,
+  },
+  typography: {
+    useNextVariants: true,
   }
 })
 
@@ -23,9 +35,7 @@ interface IState {
   subdrawerOpen: boolean,
 }
 
-interface IProps extends WithStyles<typeof styles> {
-
-}
+interface IProps extends WithStyles<typeof styles> { }
 
 class App extends React.Component<IProps, IState> {
   public state: IState = {
@@ -33,11 +43,11 @@ class App extends React.Component<IProps, IState> {
     subdrawerOpen: true,
   }
 
-  public handleDrawerToggle = (): void => {
+  public handleDrawerToggle = () => {
     this.setState(state => ({ drawerOpen: !state.drawerOpen }));
   }
 
-  public handleSubdrawerToggle = (): void => {
+  public handleSubdrawerToggle = () => {
     this.setState(state => ({ subdrawerOpen: !state.drawerOpen }));
   }
 
@@ -47,10 +57,16 @@ class App extends React.Component<IProps, IState> {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-          <main className={classes.root}>
+          <div className={classes.root}>
             <CssBaseline />
-            <div className={classes.root}>hey</div>
-          </main>
+            <NavBar
+              drawerOpen={this.state.drawerOpen}
+              subdrawerOpen={this.state.subdrawerOpen}
+              handleDrawerToggle={this.handleDrawerToggle}
+              handleSubdrawerToggle={this.handleSubdrawerToggle}
+            />
+            <DashboardRouter drawerOpen={this.state.drawerOpen} />
+          </div>
         </Router>
       </MuiThemeProvider>
     );
