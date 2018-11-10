@@ -3,7 +3,6 @@ import red from '@material-ui/core/colors/red';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
   createMuiTheme,
-  createStyles,
   MuiThemeProvider,
   withStyles,
   WithStyles 
@@ -11,8 +10,8 @@ import {
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import DashboardRouter from './components/DashboardRouter';
-import NavBar from './view/header/NavBar';
+import DashboardRouter from 'src/components/DashboardRouter';
+import NavBar from 'src/views/header/NavBar';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,7 +23,7 @@ const theme = createMuiTheme({
   }
 })
 
-const styles = createStyles({
+const styles = () => ({
   root: {
     display: 'flex',
   }

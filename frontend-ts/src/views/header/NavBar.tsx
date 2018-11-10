@@ -1,9 +1,9 @@
-import { 
+import {
   AppBar,
   Collapse,
   Drawer,
   IconButton,
-  List, 
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -19,7 +19,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import WorkIcon from '@material-ui/icons/Train';
 import * as React from 'react';
 
-import ListItemLink from '../../components/list/ListItemLink';
+import ListItemLink from 'src/components/list/ListItemLink';
 
 
 const styles = ({ spacing, mixins, zIndex }: Theme) => ({
@@ -46,7 +46,7 @@ interface IProps extends WithStyles<typeof styles> {
   handleSubdrawerToggle: () => void,
 }
 
-const NavBar: React.SFC<IProps> = ({ 
+const NavBar: React.SFC<IProps> = ({
   classes,
   drawerOpen,
   subdrawerOpen,

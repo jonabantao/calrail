@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { IRoute, routes  } from 'src/routes/dashboard-routes';
-import NotFound from 'src/view/NotFound';
+import NotFound from 'src/views/NotFound';
 
 
 const styles = (theme: Theme) => ({

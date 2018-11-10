@@ -9,7 +9,7 @@ import CircularLoader from '../../components/ui-loader/CircularLoader';
 import axios from 'axios';
 import * as moment from 'moment';
 
-import { IJob } from '../../models/jobs';
+import IJob from '../../models/job';
 
 import dashboardStyles from '../../styles/dashboard';
 

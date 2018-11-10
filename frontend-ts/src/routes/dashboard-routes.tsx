@@ -1,6 +1,9 @@
 import * as React from 'react';
-import CurrentJobs from '../view/dashboards/CurrentJobs';
-import NotFound from '../view/NotFound';
+import CurrentJobs from 'src/views/dashboards/CurrentJobs';
+import EmployeeManagement from 'src/views/dashboards/EmployeeManagement';
+import JobManagement from 'src/views/dashboards/JobManagement';
+import TrainManagement from 'src/views/dashboards/TrainManagement';
+import NotFound from 'src/views/NotFound';
 
 export interface IRoute {
   component: React.ReactType;
@@ -13,15 +16,15 @@ export const routes: IRoute[] = [
     path: '/',
   },
   {
-    component: NotFound,
+    component: JobManagement,
     path: '/jobs'
   },
   {
-    component: NotFound,
+    component: EmployeeManagement,
     path: '/employees'
   },
   {
-    component: NotFound,
+    component: TrainManagement,
     path: '/trains'
   },
   {

@@ -1,4 +1,4 @@
-export interface IJob {
+export default interface IJob {
   id: number;
   train_id: number | null;
   engineer: any | null;
