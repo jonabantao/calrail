@@ -3,7 +3,7 @@ const mysql = require('../config/db-con');
 async function findAll() {
   try {
     let trains = await mysql.pool.query(
-      `SELECT id, name, make, model FROM train`
+      'SELECT id, name, make, model FROM train'
     );
 
     return trains;
@@ -14,13 +14,14 @@ async function findAll() {
 
 
 async function addOne(trainInfo) {
-  const { trainId, trainName, trainMake, trainModel } = trainInfo;
+  console.log(trainInfo)
+  const { id, name, make, model } = trainInfo;
 
   try {
     await mysql.pool.query(
-      `INSERT INTO train (id, name, make, model)
-      VALUES (?, ?, ?, ?)`,
-      [trainId, trainName, trainMake, trainModel]
+      'INSERT INTO train (id, name, make, model) ' +
+      'VALUES (?, ?, ?, ?)',
+      [id, name, make, model]
     );
   } catch (e) {
     throw new Error(e);

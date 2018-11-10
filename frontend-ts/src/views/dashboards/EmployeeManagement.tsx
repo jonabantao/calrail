@@ -12,15 +12,14 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 
-import axios from 'axios';
-import * as moment from 'moment';
-// import EmpCertManagement from './EmpCertManagement';
-
+import TableEmployeeRow from 'src/components/table/employee-row';
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import IEmployee from 'src/models/employee';
 import Employee from 'src/services/Employee';
 import dashboardStyles from 'src/styles/dashboard';
-// import EmployeeForm from 'src/views/forms/EmployeeForm';
+import EmpCertManagement from 'src/views/dashboards/EmpCertManagement';
+import EmployeeForm from 'src/views/forms/EmployeeForm';
+
 
 interface IProps extends WithStyles<typeof dashboardStyles> { }
 
@@ -30,10 +29,6 @@ interface IState {
   loading: boolean,
   newForm: boolean,
   openModal: boolean,
-}
-
-const formatTime = (timeString: string): string => {
-  return moment(timeString).format('MM-DD-YYYY');
 }
 
 class EmployeeManagement extends React.Component<IProps, IState> {
@@ -68,8 +63,8 @@ class EmployeeManagement extends React.Component<IProps, IState> {
     });
   }
 
-  public handleDelete = (empID: string) => () => {
-    axios.delete(`/api/employees/${empID}`)
+  public handleDelete = (empID: string) => {
+    Employee.deleteEmployee(empID)
       .then(this.fetchAndStoreEmployees)
       .catch(() => {
         if (this.state.loading) {
@@ -78,7 +73,7 @@ class EmployeeManagement extends React.Component<IProps, IState> {
       })
   }
 
-  public handleEdit = (empID: string) => () => {
+  public handleEdit = (empID: string) => {
     alert('Under construction!');
   }
 
@@ -86,41 +81,20 @@ class EmployeeManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
-
-
   public render() {
     const { classes } = this.props;
-    const { employees, loading } = this.state;
-    // const employeeCount = this.state.employees.length;
+    const { employees, loading, newForm } = this.state;
+    const employeeCount = this.state.employees.length;
 
     const employeeRows = employees.map((employee: IEmployee) => {
       return (
-        <TableRow key={employee.id}>
-          <TableCell>{employee.id}</TableCell>
-          <TableCell>{employee.fname}</TableCell>
-          <TableCell>{employee.lname}</TableCell>
-          <TableCell>{employee.homebase}</TableCell>
-          <TableCell>{formatTime(employee.start_date)}</TableCell>
-          <TableCell>
-            <Button
-              color="secondary"
-              variant="contained"
-              onClick={this.handleEdit(employee.id)}
-              style={{ marginRight: 16 }}
-            >
-              Edit
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={this.handleDelete(employee.id)}
-            >
-              Fire
-            </Button>
-          </TableCell>
-        </TableRow>
+        <TableEmployeeRow
+          key={employee.id}
+          handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
+          {...employee}
+        />
       );
-
     })
 
     return (
@@ -154,16 +128,15 @@ class EmployeeManagement extends React.Component<IProps, IState> {
               </TableBody>
             </Table>)}
         </Paper>
-        {/* <EmployeeForm
+        <EmployeeForm
           open={this.state.openModal}
           handleClose={this.handleClose}
           newForm={newForm}
           refreshTable={this.fetchAndStoreEmployees}
-          formatTime={this.formatTime}
-        /> */}
-        {/* <EmpCertManagement
+        />
+        <EmpCertManagement
           empCount={employeeCount}
-        /> */}
+        />
       </React.Fragment>
     );
   }

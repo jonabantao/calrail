@@ -1,9 +1,10 @@
 import * as React from 'react';
+import CertificationManagement from 'src/views/dashboards/CertificationManagement';
 import CurrentJobs from 'src/views/dashboards/CurrentJobs';
 import EmployeeManagement from 'src/views/dashboards/EmployeeManagement';
 import JobManagement from 'src/views/dashboards/JobManagement';
+import TerminalManagement from 'src/views/dashboards/TerminalManagement';
 import TrainManagement from 'src/views/dashboards/TrainManagement';
-import NotFound from 'src/views/NotFound';
 
 export interface IRoute {
   component: React.ReactType;
@@ -28,11 +29,11 @@ export const routes: IRoute[] = [
     path: '/trains'
   },
   {
-    component: NotFound,
+    component: TerminalManagement,
     path: '/terminals'
   },
   {
-    component: NotFound,
+    component: CertificationManagement,
     path: '/certifications'
   },
 ];

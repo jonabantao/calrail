@@ -3,13 +3,14 @@ const mysql = require('../config/db-con');
 async function findAll() {
   try {
     let employees = await mysql.pool.query(
-      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date
-      FROM employee e
-      INNER JOIN terminal h ON h.id = e.home_base_id`
+      'SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date ' +
+      'FROM employee e ' +
+      'INNER JOIN terminal h ON h.id = e.home_base_id'
     );
 
     return employees;
   } catch (e) {
+    console.log(e);
     throw new Error(e);
   }
 }
@@ -17,12 +18,12 @@ async function findAll() {
 async function findAllEngineers() {
   try {
     let engineers = await mysql.pool.query(
-      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title
-      FROM employee e
-      INNER JOIN terminal h ON h.id = e.home_base_id
-      INNER JOIN employee_certification ec ON ec.employee_id = e.id
-      INNER JOIN certification c ON c.id = ec.certification_id
-      WHERE c.title = 'Engineer'`
+      'SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title ' +
+      'FROM employee e ' +
+      'INNER JOIN terminal h ON h.id = e.home_base_id ' +
+      'INNER JOIN employee_certification ec ON ec.employee_id = e.id ' +
+      'INNER JOIN certification c ON c.id = ec.certification_id ' +
+      'WHERE c.title = "Engineer"'
     );
 
     return engineers;
@@ -34,12 +35,12 @@ async function findAllEngineers() {
 async function findAllConductors() {
   try {
     let conductors = await mysql.pool.query(
-      `SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title
-      FROM employee e
-      INNER JOIN terminal h ON h.id = e.home_base_id
-      INNER JOIN employee_certification ec ON ec.employee_id = e.id
-      INNER JOIN certification c ON c.id = ec.certification_id
-      WHERE c.title = 'Conductor'`
+      'SELECT e.id, e.fname, e.lname, h.name homebase, e.start_date, c.title ' +
+      'FROM employee e ' +
+      'INNER JOIN terminal h ON h.id = e.home_base_id ' +
+      'INNER JOIN employee_certification ec ON ec.employee_id = e.id ' +
+      'INNER JOIN certification c ON c.id = ec.certification_id ' +
+      'WHERE c.title = "Conductor"'
     );
 
     return conductors;
@@ -51,10 +52,11 @@ async function findAllConductors() {
 async function findAllWithCertifications() {
   try {
     let employeesWithCertifications = await mysql.pool.query(
-      `SELECT e.id employee_id, CONCAT(e.fname, ' ', e.lname) full_name, c.id certification_id, c.title, ec.certification_date
-      FROM employee e
-      INNER JOIN employee_certification ec ON ec.employee_id = e.id
-      INNER JOIN certification c ON c.id = ec.certification_id`
+      'SELECT e.id employee_id, CONCAT(e.fname, " ", e.lname) full_name, ' +
+      'c.id certification_id, c.title, ec.certification_date ' +
+      'FROM employee e ' +
+      'INNER JOIN employee_certification ec ON ec.employee_id = e.id ' +
+      'INNER JOIN certification c ON c.id = ec.certification_id'
     );
 
     return employeesWithCertifications;
@@ -64,13 +66,13 @@ async function findAllWithCertifications() {
 }
 
 async function addOne(empInfo) {
-  const { employeeFName, employeeLName, employeeHomeId, employeeStartDate } = empInfo;
+  const { fName, lName, homeID, startDate } = empInfo;
 
   try {
     await mysql.pool.query(
-      `INSERT INTO employee (fname, lname, home_base_id, start_date)
-      VALUES (?, ?, ?, ?)`,
-      [employeeFName, employeeLName, employeeHomeId, employeeStartDate]
+      'INSERT INTO employee (fname, lname, home_base_id, start_date) ' + 
+      'VALUES (?, ?, ?, ?)',
+      [fName, lName, homeID, startDate]
     );
   } catch (e) {
     throw new Error(e);
@@ -78,13 +80,13 @@ async function addOne(empInfo) {
 }
 
 async function addCertification(empCertInfo) {
-  const { employeeId, certificationId, certificationDate } = empCertInfo;
+  const { employeeID, certificationID, certificationDate } = empCertInfo;
 
   try {
     await mysql.pool.query(
-      `INSERT INTO employee_certification (employee_id, certification_id, certification_date)
-      VALUES (?, ?, ?)`,
-      [employeeId, certificationId, certificationDate]
+      'INSERT INTO employee_certification (employee_id, certification_id, certification_date) ' +
+      'VALUES (?, ?, ?)',
+      [employeeID, certificationID, certificationDate]
     );
   } catch (e) {
     throw new Error(e);
@@ -94,8 +96,7 @@ async function addCertification(empCertInfo) {
 async function deleteOne(empId) {
   try {
     await mysql.pool.query(
-      `DELETE FROM employee
-      WHERE id = ?`,
+      'DELETE FROM employee WHERE id = ?',
       empId
     );
   } catch (e) {

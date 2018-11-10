@@ -37,19 +37,19 @@ async function findAll() {
 
   try {
     let jobs = await mysql.pool.query(
-      `SELECT eng.id eng_id, eng.fname eng_fname, eng.lname eng_lname,
-      con.id con_id, con.fname con_fname, con.lname con_lname,
-      ac.id ac_id, ac.fname ac_fname, ac.lname ac_lname,
-      start.name start_station, end.name end_station,
-      train.id train_id,
-      j.id, j.signup_time, j.signoff_time
-      FROM job j
-      INNER JOIN employee eng ON eng.id = j.engineer_id
-      INNER JOIN employee con ON con.id = j.conductor_id
-      INNER JOIN employee ac ON ac.id = j.assistant_conductor_id
-      INNER JOIN terminal start ON start.id = j.start_station_id
-      INNER JOIN terminal end ON end.id = j.end_station_id
-      INNER JOIN train ON train.id = j.train_id`
+      'SELECT eng.id eng_id, eng.fname eng_fname, eng.lname eng_lname, ' +
+      'con.id con_id, con.fname con_fname, con.lname con_lname, ' +
+      'ac.id ac_id, ac.fname ac_fname, ac.lname ac_lname, ' +
+      'start.name start_station, end.name end_station, ' +
+      'train.id train_id, ' +
+      'j.id, j.signup_time, j.signoff_time ' +
+      'FROM job j ' +
+      'LEFT JOIN employee eng ON eng.id = j.engineer_id ' +
+      'LEFT JOIN employee con ON con.id = j.conductor_id ' +
+      'LEFT JOIN employee ac ON ac.id = j.assistant_conductor_id ' +
+      'INNER JOIN terminal start ON start.id = j.start_station_id ' +
+      'INNER JOIN terminal end ON end.id = j.end_station_id ' +
+      'LEFT JOIN train ON train.id = j.train_id'
     )
 
     jobs = constructJobJSON(jobs);
@@ -61,17 +61,21 @@ async function findAll() {
 }
 
 async function addOne(jobInfo) {
-  const { jobId, trainId, engineerId, conductorId, assistantConductorId, startStationId,
-    endStationId, signupTime, signoffTime } = jobInfo;
+  const { jobID, trainID, engineerID, conductorID, assistantConductorID, startStationID,
+    endStationID, signupTime, signoffTime } = jobInfo;
 
   try {
+    if (signupTime === 'Invalid date' || signoffTime === 'Invalid date') {
+      throw new Error('Must have valid dates for signup/signoff times');
+    }
+
     await mysql.pool.query(
-      `INSERT INTO job 
-      (id, train_id, engineer_id, conductor_id, assistant_conductor_id, start_station_id,
-        end_station_id, signup_time, signoff_time)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [jobId, trainId, engineerId, conductorId, assistantConductorId, startStationId,
-      endStationId, signupTime, signoffTime]
+      'INSERT INTO job ' +
+      '(id, train_id, engineer_id, conductor_id, assistant_conductor_id, start_station_id, ' +
+      'end_station_id, signup_time, signoff_time) ' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [jobID, trainID, engineerID, conductorID, assistantConductorID, startStationID,
+      endStationID, signupTime, signoffTime]
     );
   } catch (e) {
     console.log(e);

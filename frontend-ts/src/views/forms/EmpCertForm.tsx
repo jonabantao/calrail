@@ -11,57 +11,57 @@ import CalendarIcon from '@material-ui/icons/CalendarToday';
 import KeyboardLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import DatePicker from 'material-ui-pickers/DatePicker';
-import * as React from 'react';
+import React, { Component } from 'react';
 
-import ITerminal from 'src/models/terminal';
-import Employee from 'src/services/Employee';
-import Terminal from 'src/services/Terminal';
+import axios from 'axios';
+import ICertification from 'src/models/certification';
+import IEmployee from 'src/models/employee';
 
 import { Moment } from 'moment';
 
-interface IState {
-  fName: string;
-  homeID: string;
-  homebaseOptions: ITerminal[],
-  lName: string;
-  startDate: string;
-}
-
 interface IProps {
-  refreshTable: () => void;
   handleClose: () => void;
-  newForm: boolean;
+  refreshTable: () => void;
   open: boolean;
 }
 
-class EmployeeForm extends React.Component<IProps, IState> {
-  public state = {
-    fName: '',
-    homeID: '',
-    homebaseOptions: [],
-    lName: '',
-    startDate: '',
+class EmpCertForm extends Component<IProps> {
+  public readonly state = {
+    certList: [],
+    certificationDate: '',
+    certificationID: '',
+    employeeID: '',
+    employeeList: [],
   };
 
   public componentDidMount() {
-    Terminal.getTerminals()
-      .then(res => this.setState({ homebaseOptions: res.data }))
+    axios.all([
+      axios.get('/api/employees/'),
+      axios.get('/api/certifications/'),
+    ])
+      .then(axios.spread((employees, certifications) => {
+        const newState = {
+          certList: certifications.data,
+          employeeList: employees.data,
+        };
+
+        this.setState(newState);
+      }))
       .catch();
   }
 
   public resetForm() {
     this.setState({
-      fName: '',
-      homeID: '',
-      lName: '',
-      startDate: '',
+      certificationDate: '',
+      certificationID: '',
+      employeeID: '',
     })
   }
 
   public handleSave = () => {
-    const { homebaseOptions, ...empInfo } = this.state;
+    const { employeeList, certList, ...empCertInfo } = this.state;
 
-    Employee.saveNewEmployee(empInfo)
+    axios.post('/api/employees/certifications', empCertInfo)
       .then(this.handleClose)
       .then(this.props.refreshTable)
       .catch();
@@ -81,55 +81,56 @@ class EmployeeForm extends React.Component<IProps, IState> {
   }
 
   public handleDateChange = (date: Moment) => {
-    this.setState({ startDate: date.format('YYYY-MM-DD') });
+    this.setState({ certificationDate: date.format('YYYY-MM-DD') });
   }
 
   public render() {
-    const { newForm, handleClose, open } = this.props;
-    const { homebaseOptions } = this.state;
+    const { handleClose, open } = this.props;
+    const { employeeList, certList } = this.state;
 
-    const title = newForm ? 'Register New Employee' : null;
-    const terminalOptions = homebaseOptions.map((terminal: ITerminal) => (
-      <MenuItem value={terminal.id} key={terminal.id}>{terminal.name}</MenuItem>
+    const employees = employeeList.map((employee: IEmployee) => (
+      <MenuItem value={employee.id} key={employee.id}>
+        {`${employee.fname} ${employee.lname}`}
+      </MenuItem>
+    ));
+
+    const certOptions = certList.map((cert: ICertification) => (
+      <MenuItem value={cert.id} key={cert.id}>{cert.title}</MenuItem>
     ));
 
     return (
       <Dialog onClose={handleClose} open={open} >
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle>Certify Employee</DialogTitle>
         <DialogContent>
           <TextField
-            label="First Name"
-            name="fName"
-            fullWidth={true}
-            value={this.state.fName}
-            onChange={this.handleChange}
-            required={true}
-          />
-          <TextField
-            label="Last Name"
-            name="lName"
-            fullWidth={true}
-            value={this.state.lName}
-            onChange={this.handleChange}
-            required={true}
-          />
-          <TextField
+            name="employeeID"
             select={true}
-            label="Home Base"
-            name="homeID"
+            label="Employee"
             fullWidth={true}
-            value={this.state.homeID}
+            value={this.state.employeeID}
             onChange={this.handleChange}
             required={true}
           >
-            <MenuItem value=""><em>Select a Homebase</em></MenuItem>
-            {terminalOptions}
+            <MenuItem value=""><em>Select an Employee</em></MenuItem>
+            {employees}
+          </TextField>
+          <TextField
+            name="certificationID"
+            select={true}
+            label="Certification"
+            fullWidth={true}
+            value={this.state.certificationID}
+            onChange={this.handleChange}
+            required={true}
+          >
+            <MenuItem value=""><em>Select a Certification</em></MenuItem>
+            {certOptions}
           </TextField>
           <DatePicker
             fullWidth={true}
             keyboard={true}
-            label="Start Date"
-            value={this.state.startDate}
+            label="Certification Date"
+            value={this.state.certificationDate}
             onChange={this.handleDateChange}
             invalidDateMessage="Invalid date"
             maxDateMessage="Date beyond maximum range"
@@ -160,4 +161,4 @@ class EmployeeForm extends React.Component<IProps, IState> {
   }
 }
 
-export default EmployeeForm;
+export default EmpCertForm;

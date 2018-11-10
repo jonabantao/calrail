@@ -16,6 +16,7 @@
     "importHelpers": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
+    "allowSyntheticDefaultImports": true,
   },
   "exclude": [
     "node_modules",

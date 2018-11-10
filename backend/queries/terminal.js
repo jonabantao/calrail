@@ -3,7 +3,7 @@ const mysql = require('../config/db-con');
 async function findAll() {
   try {
     let terminals = await mysql.pool.query(
-      `SELECT id, name FROM terminal`
+      'SELECT id, name FROM terminal'
     );
 
     return terminals;
@@ -18,8 +18,8 @@ async function addOne(terminalInfo) {
 
   try {
     await mysql.pool.query(
-      `INSERT INTO terminal (name)
-      VALUES (?)`,
+      'INSERT INTO terminal (name) ' +
+      'VALUES (?)',
       [terminalName]
     );
   } catch (e) {

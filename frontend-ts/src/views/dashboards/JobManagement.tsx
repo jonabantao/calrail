@@ -15,11 +15,10 @@ import * as React from 'react';
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import IJob from 'src/models/job';
 import Job from 'src/services/Job';
+import TimeUtil from 'src/utils/time';
 import JobForm from 'src/views/forms/JobForm';
 
 import dashboardStyles from 'src/styles/dashboard';
-
-import * as moment from 'moment';
 
 interface IProps extends WithStyles<typeof dashboardStyles> { }
 
@@ -52,10 +51,6 @@ class JobManagement extends React.Component<IProps, IState> {
     this.setState(() => ({ loading: true }), this.fetchAndStoreJobs);
   }
 
-  public formatHours = (hourString: string): string => {
-    return moment(hourString, 'HH:mm:ss').format('HHmm');
-  }
-
   public handleOpen = () => {
     this.setState({ openModal: true });
   }
@@ -72,14 +67,22 @@ class JobManagement extends React.Component<IProps, IState> {
     const jobRows = jobs.map((job: IJob) => (
       <TableRow key={job.id}>
         <TableCell>{job.id}</TableCell>
-        <TableCell>{job.train_id}</TableCell>
-        <TableCell>{`${job.engineer.fname} ${job.engineer.lname}`}</TableCell>
-        <TableCell>{`${job.conductor.fname} ${job.conductor.lname}`}</TableCell>
-        <TableCell>{`${job.assistant_conductor.fname} ${job.assistant_conductor.lname}`}</TableCell>
+        <TableCell>
+          {job.train_id === null ? 'EMPTY' : job.train_id}
+        </TableCell>
+        <TableCell>
+          {job.engineer.fname === null ? 'EMPTY' : `${job.engineer.fname + ' ' + job.engineer.lname}`}
+        </TableCell>
+        <TableCell>
+          {job.conductor.fname === null ? 'EMPTY' : `${job.conductor.fname + ' ' + job.conductor.lname}`}
+        </TableCell>
+        <TableCell>
+          {job.assistant_conductor.fname === null ? 'EMPTY' : `${job.assistant_conductor.fname + ' ' + job.assistant_conductor.lname}`}
+        </TableCell>
         <TableCell>{job.start_station}</TableCell>
         <TableCell>{job.end_station}</TableCell>
-        <TableCell>{this.formatHours(job.signup_time)}</TableCell>
-        <TableCell>{this.formatHours(job.signoff_time)}</TableCell>
+        <TableCell>{TimeUtil.formatHours(job.signup_time)}</TableCell>
+        <TableCell>{TimeUtil.formatHours(job.signoff_time)}</TableCell>
       </TableRow>
     ));
 

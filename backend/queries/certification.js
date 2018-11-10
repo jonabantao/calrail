@@ -3,8 +3,8 @@ const mysql = require('../config/db-con');
 async function findAll() {
   try {
     let certifications = await mysql.pool.query(
-      `SELECT id, title
-      FROM certification`
+      'SELECT id, title ' +
+      'FROM certification'
     );
 
     return certifications;
@@ -18,8 +18,8 @@ async function addOne(certInfo) {
 
   try {
     await mysql.pool.query(
-      `INSERT INTO certification (title)
-      VALUES (?)`,
+      'INSERT INTO certification (title) ' +
+      'VALUES (?)',
       [certificationTitle]
     );
   } catch (e) {

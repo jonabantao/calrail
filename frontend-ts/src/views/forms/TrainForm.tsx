@@ -18,22 +18,22 @@ interface IProps {
 }
 
 interface IState {
-  trainId: string,
-  trainMake: string,
-  trainModel: string,
-  trainName: string,
+  id: string,
+  make: string,
+  model: string,
+  name: string,
 }
 
 class TrainForm extends React.Component<IProps, IState> {
   public state = {
-    trainId: '',
-    trainMake: '',
-    trainModel: '',
-    trainName: '',
+    id: '',
+    make: '',
+    model: '',
+    name: '',
   };
 
   public handleSave = () => {
-    const trainInfo = Object.assign({}, this.state);
+    const { ...trainInfo } = this.state;
 
     axios.post('/api/trains/', trainInfo)
       .then(this.handleClose)
@@ -56,10 +56,10 @@ class TrainForm extends React.Component<IProps, IState> {
   
   public resetForm() {
     this.setState({
-      trainId: '',
-      trainMake: '',
-      trainModel: '',
-      trainName: '',
+      id: '',
+      make: '',
+      model: '',
+      name: '',
     })
   }
 
@@ -74,33 +74,33 @@ class TrainForm extends React.Component<IProps, IState> {
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <TextField
-            name="trainId"
+            name="id"
             type="number"
             label="Train ID"
-            value={this.state.trainId}
+            value={this.state.id}
             onChange={this.handleChange}
             required={true}
             fullWidth={true}
           />
           <TextField
-            name="trainName"
+            name="name"
             label="Train Designation"
             fullWidth={true}
-            value={this.state.trainName}
+            value={this.state.name}
             onChange={this.handleChange}
           />
           <TextField
-            name="trainMake"
+            name="make"
             label="Make"
             fullWidth={true}
-            value={this.state.trainMake}
+            value={this.state.make}
             onChange={this.handleChange}
           />
           <TextField
-            name="trainModel"
+            name="model"
             label="Model"
             fullWidth={true}
-            value={this.state.trainModel}
+            value={this.state.model}
             onChange={this.handleChange}
           />
         </DialogContent>
