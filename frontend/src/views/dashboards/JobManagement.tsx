@@ -12,13 +12,14 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 
+import TableJobRow from 'src/components/table/job-row';
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import IJob from 'src/models/job';
 import Job from 'src/services/Job';
-import TimeUtil from 'src/utils/time';
 import JobForm from 'src/views/forms/JobForm';
 
 import dashboardStyles from 'src/styles/dashboard';
+
 
 interface IProps extends WithStyles<typeof dashboardStyles> { }
 
@@ -39,7 +40,7 @@ class JobManagement extends React.Component<IProps, IState> {
   };
 
   public fetchAndStoreJobs = () => {
-    Job.getJobs()
+    Job.getAll()
       .then(res => this.setState({
         jobs: res.data,
         loading: false,
@@ -59,31 +60,22 @@ class JobManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
+  public handleDelete = (jobID: string) => {
+    this.setState(
+      () => ({ loading: true }),
+      () => Job.deleteOne(jobID)
+        .then(this.fetchAndStoreJobs)
+        .catch(() => this.setState({ loading: false }))
+    );
+  }
+
 
   public render() {
     const { classes } = this.props;
     const { jobs, loading } = this.state;
 
     const jobRows = jobs.map((job: IJob) => (
-      <TableRow key={job.id}>
-        <TableCell>{job.id}</TableCell>
-        <TableCell>
-          {job.train_id === null ? 'EMPTY' : job.train_id}
-        </TableCell>
-        <TableCell>
-          {job.engineer.fname === null ? 'EMPTY' : `${job.engineer.fname + ' ' + job.engineer.lname}`}
-        </TableCell>
-        <TableCell>
-          {job.conductor.fname === null ? 'EMPTY' : `${job.conductor.fname + ' ' + job.conductor.lname}`}
-        </TableCell>
-        <TableCell>
-          {job.assistant_conductor.fname === null ? 'EMPTY' : `${job.assistant_conductor.fname + ' ' + job.assistant_conductor.lname}`}
-        </TableCell>
-        <TableCell>{job.start_station}</TableCell>
-        <TableCell>{job.end_station}</TableCell>
-        <TableCell>{TimeUtil.formatHours(job.signup_time)}</TableCell>
-        <TableCell>{TimeUtil.formatHours(job.signoff_time)}</TableCell>
-      </TableRow>
+      <TableJobRow key={job.id} {...job} handleDelete={this.handleDelete} manageView={true} />
     ));
 
     return (
@@ -113,6 +105,7 @@ class JobManagement extends React.Component<IProps, IState> {
                   <TableCell>End Station</TableCell>
                   <TableCell>Signup</TableCell>
                   <TableCell>Signoff</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>

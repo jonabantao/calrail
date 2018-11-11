@@ -1,9 +1,11 @@
-export default interface IJob {
-  id: number;
-  train_id: number | null;
-  engineer: any | null;
-  conductor: any | null;
-  assistant_conductor: any | null;
+import IEmployee from './employee';
+
+export default interface IJob extends IEmployee {
+  id: string;
+  train_id: string | null;
+  engineer: IEmployee;
+  conductor: IEmployee;
+  assistant_conductor: IEmployee;
   start_station: string;
   end_station: string;
   signup_time: string;

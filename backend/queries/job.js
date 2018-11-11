@@ -83,7 +83,19 @@ async function addOne(jobInfo) {
   }
 }
 
+async function deleteOne(jobID) {
+  try {
+    await mysql.pool.query(
+      'DELETE FROM job WHERE id = ?',
+      jobID
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
   addOne,
+  deleteOne,
 }

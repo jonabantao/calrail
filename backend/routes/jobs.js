@@ -20,6 +20,17 @@ router.post('/', async (req, res) => {
   } catch (e) {
     res.sendStatus(500);
   }
-})
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    await Job.deleteOne(req.params.id);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;

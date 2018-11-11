@@ -24,7 +24,7 @@ class TableEmployeeRow extends React.PureComponent<IProps, {}> {
     const { id, fname, lname, homebase } = this.props;
 
     return (
-      <TableRow key={id}>
+      <TableRow>
         <TableCell>{id}</TableCell>
         <TableCell>{fname}</TableCell>
         <TableCell>{lname}</TableCell>

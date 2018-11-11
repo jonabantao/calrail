@@ -4,23 +4,23 @@ import EditIcon from '@material-ui/icons/Assignment';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import CircularLoader from '../../components/ui-loader/CircularLoader';
+import TableJobRow from 'src/components/table/job-row';
+import CircularLoader from 'src/components/ui-loader/CircularLoader';
+import IJob from 'src/models/job';
+import Job from 'src/services/Job';
 
-import axios from 'axios';
-import * as moment from 'moment';
+import dashboardStyles from 'src/styles/dashboard';
 
-import IJob from '../../models/job';
 
-import dashboardStyles from '../../styles/dashboard';
+const JobsLink: React.SFC = (props: any) => <Link {...props} to="/jobs" />
+
+
+interface IProps extends WithStyles<typeof dashboardStyles> { }
 
 interface IState {
   jobs: IJob[];
   loading: boolean;
 }
-
-interface IProps extends WithStyles<typeof dashboardStyles> { }
-
-const JobsLink: React.SFC = (props: any) => <Link {...props} to="/jobs" />
 
 class CurrentJobs extends React.Component<IProps, IState> {
   public state = {
@@ -28,22 +28,17 @@ class CurrentJobs extends React.Component<IProps, IState> {
     loading: false,
   };
 
-
   public componentDidMount() {
     this.setState(() => ({ loading: true }), this.fetchAndStoreJobs);
   }
 
   public fetchAndStoreJobs = (): void => {
-    axios.get('/api/jobs')
-      .then(res => this.setState({
+    Job.getAll()
+      .then((res) => this.setState({
         jobs: res.data,
         loading: false,
       }))
       .catch(() => this.setState({ loading: false }));
-  }
-
-  public formatHours = (hourString: string): string => {
-    return moment(hourString, 'HH:mm:ss').format('HHmm');
   }
 
   public render() {
@@ -51,17 +46,7 @@ class CurrentJobs extends React.Component<IProps, IState> {
     const { jobs, loading } = this.state;
 
     const jobRows = jobs.map((job: IJob) => (
-      <TableRow key={job.id}>
-        <TableCell>{job.id}</TableCell>
-        <TableCell>{job.train_id}</TableCell>
-        <TableCell>{`${job.engineer.fname} ${job.engineer.lname}`}</TableCell>
-        <TableCell>{`${job.conductor.fname} ${job.conductor.lname}`}</TableCell>
-        <TableCell>{`${job.assistant_conductor.fname} ${job.assistant_conductor.lname}`}</TableCell>
-        <TableCell>{job.start_station}</TableCell>
-        <TableCell>{job.end_station}</TableCell>
-        <TableCell>{this.formatHours(job.signup_time)}</TableCell>
-        <TableCell>{this.formatHours(job.signoff_time)}</TableCell>
-      </TableRow>
+      <TableJobRow key={job.id} {...job} />
     ));
 
     return (
