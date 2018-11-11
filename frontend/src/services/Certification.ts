@@ -10,4 +10,8 @@ export default class Certification {
   public static addOne = (certificationInfo: IFormCertification): AxiosPromise => {
     return axios.post('/api/certifications', certificationInfo);
   }
+
+  public static deleteOne = (certID: string): AxiosPromise => {
+    return axios.delete(`/api/certifications/${certID}`);
+  }
 }

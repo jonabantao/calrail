@@ -27,7 +27,19 @@ async function addOne(terminalInfo) {
   }
 }
 
+async function deleteOne(terminalID) {
+  try {
+    await mysql.pool.query(
+      'DELETE FROM terminal WHERE id = ?',
+      terminalID,
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
 module.exports = {
   findAll,
   addOne,
+  deleteOne,
 };

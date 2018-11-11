@@ -22,4 +22,18 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    await Terminal.deleteOne(req.params.id);
+
+    res.sendStatus(200);
+  } catch (e) {
+    if (e.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.sendStatus(409);
+    }
+
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

@@ -25,7 +25,19 @@ async function addOne(certInfo) {
   }
 }
 
+async function deleteOne(certID) {
+  try {
+    await mysql.pool.query(
+      'DELETE FROM certification WHERE id = ?',
+      certID,
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
   addOne,
+  deleteOne,
 };

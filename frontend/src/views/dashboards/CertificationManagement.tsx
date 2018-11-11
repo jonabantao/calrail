@@ -64,6 +64,12 @@ class CertificationManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
+  public handleDelete = (certID: string) => () => {
+    Certification.deleteOne(certID)
+      .then(this.fetchAndStoreCertifications)
+      .catch();
+  }
+
   public render() {
     const { classes } = this.props;
     const { certifications, loading, newForm } = this.state;
@@ -71,6 +77,15 @@ class CertificationManagement extends React.Component<IProps, IState> {
     const certificationRows = certifications.map((certification: ICertification) => (
       <TableRow key={certification.id}>
         <TableCell>{certification.title}</TableCell>
+        <TableCell>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={this.handleDelete(certification.id)}
+          >
+            Remove
+          </Button>
+        </TableCell>
       </TableRow>
     ));
 
@@ -93,6 +108,7 @@ class CertificationManagement extends React.Component<IProps, IState> {
               <TableHead>
                 <TableRow>
                   <TableCell>Certification Title</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>

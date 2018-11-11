@@ -58,6 +58,16 @@ class TerminalManagement extends React.Component<IProps> {
     this.setState({ openModal: false });
   }
 
+  public handleDelete = (terminalID: string) => () => {
+    Terminal.deleteOne(terminalID)
+      .then(this.fetchAndStoreTerminals)
+      .catch(({ response }) => {
+        if (response.status === 409) {
+          alert('Cannot delete a terminal associated with a job or employee. Please remove associations first.')
+        }
+      });
+  }
+
   public render() {
     const { classes } = this.props;
     const { terminals, loading, newForm } = this.state;
@@ -65,6 +75,15 @@ class TerminalManagement extends React.Component<IProps> {
     const terminalRows = terminals.map((terminal: ITerminal) => (
       <TableRow key={terminal.id}>
         <TableCell>{terminal.name}</TableCell>
+        <TableCell>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={this.handleDelete(terminal.id)}
+          >
+            Remove
+          </Button>
+        </TableCell>
       </TableRow>
     ));
 
@@ -87,6 +106,7 @@ class TerminalManagement extends React.Component<IProps> {
               <TableHead>
                 <TableRow>
                   <TableCell>Terminal Name</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
