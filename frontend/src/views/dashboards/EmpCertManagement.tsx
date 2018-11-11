@@ -71,6 +71,11 @@ class EmpCertManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
+  public handleDelete = (empID : string, certID: string) => () => {
+    Employee.deleteCertification(empID, certID)
+      .then(this.fetchAndStoreEmployeesCerts);
+  }
+
   public render() {
     const { classes, theme } = this.props;
     const { loading, employeesCerts } = this.state;
@@ -81,6 +86,15 @@ class EmpCertManagement extends React.Component<IProps, IState> {
           <TableCell>{empCert.full_name}</TableCell>
           <TableCell>{empCert.title}</TableCell>
           <TableCell>{TimeUtil.formatDate(empCert.certification_date)}</TableCell>
+          <TableCell>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={this.handleDelete(empCert.employee_id, empCert.certification_id)}
+            >
+              Remove
+            </Button>
+          </TableCell>
         </TableRow>
       );
     });

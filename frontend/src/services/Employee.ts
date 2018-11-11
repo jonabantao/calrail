@@ -19,4 +19,8 @@ export default class Employee {
   public static deleteOne = (empID: string): AxiosPromise => {
     return axios.delete(`/api/employees/${empID}`);
   }
+
+  public static deleteCertification = (empID: string, certID: string) => {
+    return axios.delete(`/api/employees/${empID}/certifications/${certID}`);
+  }
 }

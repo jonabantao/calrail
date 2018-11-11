@@ -62,6 +62,17 @@ router.post('/certifications', async (req, res) => {
   }
 });
 
+router.delete('/:empID/certifications/:certID', async (req, res) => {
+  try {
+    await Employee.deleteCertification(req.params.empID, req.params.certID);
+
+    res.sendStatus(200)
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     await Employee.deleteOne(req.params.id);

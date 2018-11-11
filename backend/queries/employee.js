@@ -11,7 +11,7 @@ async function findAll() {
     return employees;
   } catch (e) {
     console.log(e);
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -28,7 +28,7 @@ async function findAllEngineers() {
 
     return engineers;
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -45,7 +45,7 @@ async function findAllConductors() {
 
     return conductors;
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -61,7 +61,7 @@ async function findAllWithCertifications() {
 
     return employeesWithCertifications;
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -75,7 +75,7 @@ async function addOne(empInfo) {
       [fName, lName, homeID, startDate]
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -89,7 +89,7 @@ async function addCertification(empCertInfo) {
       [employeeID, certificationID, certificationDate]
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -100,7 +100,18 @@ async function deleteOne(empId) {
       empId
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
+  }
+}
+
+async function deleteCertification(empID, certID) {
+  try {
+    await mysql.pool.query(
+      'DELETE FROM employee_certification WHERE employee_id = ? AND certification_id = ?',
+      [empID, certID],
+    );
+  } catch (e) {
+    throw e;
   }
 }
 
@@ -112,4 +123,5 @@ module.exports = {
   addOne,
   addCertification,
   deleteOne,
+  deleteCertification,
 };
