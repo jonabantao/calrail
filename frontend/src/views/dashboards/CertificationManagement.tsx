@@ -67,7 +67,11 @@ class CertificationManagement extends React.Component<IProps, IState> {
   public handleDelete = (certID: string) => () => {
     Certification.deleteOne(certID)
       .then(this.fetchAndStoreCertifications)
-      .catch();
+      .catch(({ response }) => {
+        if (response.status === 409) {
+          alert('Cannot delete Conductor or Engineer certifications. Please add and test delete functionality on new certifications.');
+        }
+      });
   }
 
   public render() {

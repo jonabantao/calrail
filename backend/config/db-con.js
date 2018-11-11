@@ -12,7 +12,7 @@ try {
 }
 
 let pool = mysql.createPool({
-  connectionLimit: 10,
+  connectionLimit: 25,
   host: database.host || process.env.DB_HOST,
   user: database.user || process.env.DB_USER,
   password: database.password || process.env.DB_PASSWORD,

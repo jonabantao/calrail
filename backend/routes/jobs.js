@@ -8,6 +8,7 @@ router.get('/', async (req, res) => {
 
     res.status(200).json(response);
   } catch (e) {
+    console.log(e);
     res.sendStatus(500);
   }
 });

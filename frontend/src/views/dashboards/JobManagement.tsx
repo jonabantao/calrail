@@ -113,11 +113,11 @@ class JobManagement extends React.Component<IProps, IState> {
               </TableBody>
             </Table>)}
         </Paper>
-        <JobForm
+        {this.state.openModal && <JobForm
           open={this.state.openModal}
           handleClose={this.handleClose}
           refreshTable={this.fetchAndStoreJobs}
-        />
+        />}
       </React.Fragment>
     );
   }

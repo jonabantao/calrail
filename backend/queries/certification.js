@@ -9,7 +9,7 @@ async function findAll() {
 
     return certifications;
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -21,18 +21,27 @@ async function addOne(certInfo) {
       [certInfo.title]
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
 async function deleteOne(certID) {
+  const certIDCheck = Number.parseInt(certID, 10);
+
   try {
+    if (certIDCheck === 1 || certIDCheck === 2) {
+      throw {
+        code: 'ER_CONDUCTOR_ENGINEER_DELETE_NOT_ALLOWED',
+        error: new Error('Delete not allowed'),
+      }
+    }
+
     await mysql.pool.query(
       'DELETE FROM certification WHERE id = ?',
       certID,
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 

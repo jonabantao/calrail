@@ -28,7 +28,10 @@ router.delete('/:id', async (req, res) => {
 
     res.sendStatus(200);
   } catch (e) {
-    console.log(e);
+    if (e.code === 'ER_CONDUCTOR_ENGINEER_DELETE_NOT_ALLOWED') {
+      return res.sendStatus(409);
+    } 
+
     res.sendStatus(500);
   }
 });

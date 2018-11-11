@@ -49,7 +49,7 @@ class App extends React.Component<IProps, IState> {
   }
 
   public handleSubdrawerToggle = () => {
-    this.setState(state => ({ subdrawerOpen: !state.drawerOpen }));
+    this.setState(state => ({ subdrawerOpen: !state.subdrawerOpen }));
   }
 
   public render() {

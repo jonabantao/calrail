@@ -56,7 +56,7 @@ async function findAll() {
 
     return jobs;
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -79,7 +79,7 @@ async function addOne(jobInfo) {
     );
   } catch (e) {
     console.log(e);
-    throw new Error(e);
+    throw e;
   }
 }
 
@@ -90,7 +90,7 @@ async function deleteOne(jobID) {
       jobID
     );
   } catch (e) {
-    throw new Error(e);
+    throw e;
   }
 }
 
