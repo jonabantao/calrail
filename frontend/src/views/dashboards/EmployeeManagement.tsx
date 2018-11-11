@@ -43,7 +43,7 @@ class EmployeeManagement extends React.Component<IProps, IState> {
   public fetchAndStoreEmployees = () => {
     this.setState(
       () => ({ loading: true }),
-      () => Employee.getEmployees()
+      () => Employee.getAll()
         .then(res => this.setState({
           employees: res.data,
           loading: false,
@@ -64,7 +64,7 @@ class EmployeeManagement extends React.Component<IProps, IState> {
   }
 
   public handleDelete = (empID: string) => {
-    Employee.deleteEmployee(empID)
+    Employee.deleteOne(empID)
       .then(this.fetchAndStoreEmployees)
       .catch(() => {
         if (this.state.loading) {

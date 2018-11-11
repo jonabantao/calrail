@@ -18,7 +18,7 @@ import TerminalForm from 'src/views/forms/TerminalForm';
 
 import dashboardStyles from 'src/styles/dashboard';
 
-import axios from 'axios';
+import Terminal from 'src/services/Terminal';
 
 
 interface IProps extends WithStyles<typeof dashboardStyles> { }
@@ -34,7 +34,7 @@ class TerminalManagement extends React.Component<IProps> {
   public fetchAndStoreTerminals = () => {
     this.setState(
       () => ({ loading: true }),
-      () => axios.get('/api/terminals')
+      () => Terminal.getAll()
         .then(res => this.setState({
           loading: false,
           terminals: res.data,

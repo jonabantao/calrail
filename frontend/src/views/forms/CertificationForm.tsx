@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import * as React from 'react';
 
-import axios from 'axios';
+import Certification from 'src/services/Certification';
 
 
 interface IProps {
@@ -19,24 +19,24 @@ interface IProps {
 }
 
 interface IState {
-  certificationTitle: string;
+  title: string;
 }
 
 class CertificationForm extends React.Component<IProps, IState> {
   public readonly state = {
-    certificationTitle: ''
+    title: ''
   };
 
   public resetForm() {
     this.setState({
-      certificationTitle: '',
+      title: '',
     })
   }
 
   public handleSave = () => {
-    const certInfo = Object.assign({}, this.state);
+    const { ...certInfo } = this.state;
 
-    axios.post('/api/certifications/', certInfo)
+    Certification.addOne(certInfo)
       .then(this.handleClose)
       .then(this.props.refreshTable)
       .catch();
@@ -48,7 +48,7 @@ class CertificationForm extends React.Component<IProps, IState> {
   }
 
   public handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ certificationTitle: e.target.value });
+    this.setState({ title: e.target.value });
   }
 
   public render() {
@@ -64,7 +64,7 @@ class CertificationForm extends React.Component<IProps, IState> {
             label="Certification Title"
             fullWidth={true}
             required={true}
-            value={this.state.certificationTitle}
+            value={this.state.title}
             onChange={this.handleTitleChange}
           />
         </DialogContent>

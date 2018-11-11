@@ -14,10 +14,11 @@ import * as React from 'react';
 
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import ITrain from 'src/models/train';
-import dashboardStyles from 'src/styles/dashboard';
+import Train from 'src/services/Train';
 import TrainForm from 'src/views/forms/TrainForm';
 
-import axios from 'axios';
+import dashboardStyles from 'src/styles/dashboard';
+
 
 interface IProps extends WithStyles<typeof dashboardStyles> { }
 
@@ -41,7 +42,7 @@ class TrainManagement extends React.Component<IProps, IState> {
   public fetchAndStoreTrains = () => {
     this.setState(
       () => ({ loading: true }),
-      () => axios.get('/api/trains')
+      () => Train.getAll()
         .then(res => this.setState({
           loading: false,
           trains: res.data,
@@ -65,6 +66,11 @@ class TrainManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
+  public handleDelete = (trainID: string) => () => {
+    Train.deleteOne(trainID)
+      .then(this.fetchAndStoreTrains);
+  }
+
   public render() {
     const { classes } = this.props;
     const { trains, loading, newForm } = this.state;
@@ -75,6 +81,15 @@ class TrainManagement extends React.Component<IProps, IState> {
         <TableCell>{train.name}</TableCell>
         <TableCell>{train.make}</TableCell>
         <TableCell>{train.model}</TableCell>
+        <TableCell>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={this.handleDelete(train.id)}
+          >
+            Remove
+          </Button>
+        </TableCell>
       </TableRow>
     ));
 
@@ -100,6 +115,7 @@ class TrainManagement extends React.Component<IProps, IState> {
                   <TableCell>Designation</TableCell>
                   <TableCell>Make</TableCell>
                   <TableCell>Model</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>

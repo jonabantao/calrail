@@ -14,11 +14,11 @@ import * as React from 'react';
 
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import IEmployeeCertification from 'src/models/employee-cert';
-import dashboardStyles from 'src/styles/dashboard';
+import Employee from 'src/services/Employee';
 import TimeUtil from 'src/utils/time';
 import EmpCertForm from 'src/views/forms/EmpCertForm';
 
-import axios from 'axios';
+import dashboardStyles from 'src/styles/dashboard';
 
 
 interface IProps extends WithStyles<typeof dashboardStyles> {
@@ -44,7 +44,7 @@ class EmpCertManagement extends React.Component<IProps, IState> {
   public fetchAndStoreEmployeesCerts = () => {
     this.setState(
       () => ({ loading: true }),
-      () => axios.get('/api/employees/certifications')
+      () => Employee.getAllWithCertifications()
         .then(res => this.setState({
           employeesCerts: res.data,
           loading: false,
@@ -108,6 +108,7 @@ class EmpCertManagement extends React.Component<IProps, IState> {
                   <TableCell>Employee Name</TableCell>
                   <TableCell>Certification Title</TableCell>
                   <TableCell>Certification Date</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>

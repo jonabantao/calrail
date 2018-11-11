@@ -12,9 +12,9 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 
-import axios from 'axios';
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import ICertification from 'src/models/certification';
+import Certification from 'src/services/Certification';
 import CertificationForm from 'src/views/forms/CertificationForm';
 
 import dashboardStyles from 'src/styles/dashboard';
@@ -40,7 +40,7 @@ class CertificationManagement extends React.Component<IProps, IState> {
   public fetchAndStoreCertifications = () => {
     this.setState(
       () => ({ loading: true }),
-      () => axios.get('/api/certifications')
+      () => Certification.getAll()
         .then(res => this.setState({
           certifications: res.data,
           loading: false,

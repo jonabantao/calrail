@@ -14,13 +14,11 @@ async function findAll() {
 }
 
 async function addOne(certInfo) {
-  const { certificationTitle } = certInfo;
-
   try {
     await mysql.pool.query(
       'INSERT INTO certification (title) ' +
       'VALUES (?)',
-      [certificationTitle]
+      [certInfo.title]
     );
   } catch (e) {
     throw new Error(e);

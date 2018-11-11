@@ -44,7 +44,7 @@ class EmployeeForm extends React.Component<IProps, IState> {
   };
 
   public componentDidMount() {
-    Terminal.getTerminals()
+    Terminal.getAll()
       .then(res => this.setState({ homebaseOptions: res.data }))
       .catch();
   }
@@ -61,7 +61,7 @@ class EmployeeForm extends React.Component<IProps, IState> {
   public handleSave = () => {
     const { homebaseOptions, ...empInfo } = this.state;
 
-    Employee.saveNewEmployee(empInfo)
+    Employee.addOne(empInfo)
       .then(this.handleClose)
       .then(this.props.refreshTable)
       .catch();

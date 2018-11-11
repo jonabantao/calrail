@@ -14,7 +14,6 @@ async function findAll() {
 
 
 async function addOne(trainInfo) {
-  console.log(trainInfo)
   const { id, name, make, model } = trainInfo;
 
   try {
@@ -28,7 +27,19 @@ async function addOne(trainInfo) {
   }
 }
 
+async function deleteOne(trainID) {
+  try {
+    await mysql.pool.query(
+      'DELETE FROM train WHERE id = ?',
+      trainID,
+    );
+  } catch (e) {
+    throw new Error(e);
+  }
+}
+
 module.exports = {
   findAll,
   addOne,
+  deleteOne,
 };
