@@ -31,7 +31,7 @@ class TableJobRow extends React.PureComponent<IProps, {}> {
     return (
       <TableRow>
         <TableCell>{id}</TableCell>
-        <TableCell>{train_id}</TableCell>
+        <TableCell>{train_id === null ? 'BLANK' : train_id}</TableCell>
         <TableCell>
           {engineer.fname === null ? 'BLANK' : `${engineer.fname} ${engineer.lname}`}
         </TableCell>
