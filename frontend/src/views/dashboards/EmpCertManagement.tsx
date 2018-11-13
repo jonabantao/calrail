@@ -17,6 +17,7 @@ import * as React from 'react';
 import CircularLoader from 'src/components/ui-loader/CircularLoader';
 import IEmployeeCertification from 'src/models/employee-cert';
 import Employee from 'src/services/Employee';
+import Job from 'src/services/Job';
 import TimeUtil from 'src/utils/time';
 import EmpCertForm from 'src/views/forms/EmpCertForm';
 
@@ -87,9 +88,19 @@ class EmpCertManagement extends React.Component<IProps, IState> {
     this.setState({ openModal: false });
   }
 
-  public handleDelete = (empID : string, certID: string) => () => {
+  public handleDelete = (empID : string, certID: string, certTitle: string) => () => {
     Employee.deleteCertification(empID, certID)
-      .then(this.fetchAndStoreEmployeesCerts);
+      .then((): any => {
+        if (certTitle === 'Conductor') {
+          return Job.removeConductorById(empID);
+        } else if (certTitle === 'Engineer') {
+          return Job.removeEngineerById(empID);
+        }
+
+        return;
+      })
+      .then(this.fetchAndStoreEmployeesCerts)
+      .catch();
   }
 
   public handleFilterByTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +135,7 @@ class EmpCertManagement extends React.Component<IProps, IState> {
             <Button
               color="primary"
               variant="contained"
-              onClick={this.handleDelete(empCert.employee_id, empCert.certification_id)}
+              onClick={this.handleDelete(empCert.employee_id, empCert.certification_id, empCert.title)}
             >
               Remove
             </Button>
