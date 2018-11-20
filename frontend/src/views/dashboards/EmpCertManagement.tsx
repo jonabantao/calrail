@@ -144,6 +144,8 @@ class EmpCertManagement extends React.Component<IProps, IState> {
       );
     });
 
+    const defaultCertText = certList.length ? 'Select a Certification' : 'No employees with certifications found';
+
     return (
       <React.Fragment>
         <Typography variant="h6" style={{ marginTop: theme.spacing.unit * 3 }}>
@@ -167,7 +169,7 @@ class EmpCertManagement extends React.Component<IProps, IState> {
           style={{ minWidth: 300, marginLeft: 16 }}
           variant="filled"
         >
-          <MenuItem value=""><em>Select a certification title</em></MenuItem>
+          <MenuItem value=""><em>{defaultCertText}</em></MenuItem>
           {certListDropdown}
         </TextField>
         <Paper className={classes.root}>
