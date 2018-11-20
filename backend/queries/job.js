@@ -94,8 +94,32 @@ async function deleteOne(jobID) {
   }
 }
 
+async function removeConductor(empID) {
+  try {
+    await mysql.pool.query(
+      'UPDATE job SET conductor_id = NULL WHERE conductor_id = ?',
+      empID
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
+async function removeEngineer(empID) {
+  try {
+    await mysql.pool.query(
+      'UPDATE job SET engineer_id = NULL WHERE engineer_id = ?',
+      empID
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
 module.exports = {
   findAll,
   addOne,
   deleteOne,
+  removeConductor,
+  removeEngineer,
 }

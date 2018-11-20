@@ -34,4 +34,27 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.delete('/conductor/:empID', async (req, res) => {
+  try {
+    await Job.removeConductor(req.params.empID);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+router.delete('/engineer/:empID', async (req, res) => {
+  try {
+    await Job.removeEngineer(req.params.empID);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+
+    res.sendStatus(500);
+  }
+})
+
 module.exports = router;
