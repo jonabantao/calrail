@@ -42,6 +42,17 @@ router.get('/conductors', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    let response = await Employee.findOne(req.params.id);
+
+    res.status(200).json(response[0]);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     await Employee.addOne(req.body);
@@ -78,6 +89,17 @@ router.delete('/:id', async (req, res) => {
     await Employee.deleteOne(req.params.id);
 
     res.sendStatus(200)
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    await Employee.updateOne(req.params.id, req.body);
+
+    res.sendStatus(200);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);

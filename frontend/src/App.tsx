@@ -17,7 +17,9 @@ import NavBar from 'src/views/header/NavBar';
 
 const theme = createMuiTheme({
   palette: {
-    primary: red,
+    primary: {
+      main: red[800],
+    },
     secondary: grey,
   },
   typography: {

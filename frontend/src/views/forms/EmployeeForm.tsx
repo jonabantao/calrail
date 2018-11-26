@@ -28,6 +28,7 @@ interface IState {
 }
 
 interface IProps {
+  employeeID: string | undefined,
   refreshTable: () => void;
   handleClose: () => void;
   newForm: boolean;
@@ -49,6 +50,23 @@ class EmployeeForm extends React.Component<IProps, IState> {
       .catch();
   }
 
+  public componentDidUpdate(prevProps: IProps) {
+    const { employeeID } = this.props;
+
+    if (employeeID !== undefined && prevProps.employeeID !== employeeID) {
+      Employee.getOne(employeeID)
+        .then(res => res.data)
+        .then((emp) => {
+          this.setState({
+            fName: emp.fname,
+            homeID: emp.homebase_id,
+            lName: emp.lname,
+            startDate: emp.start_date,
+          });
+        });
+    }
+  }
+
   public resetForm() {
     this.setState({
       fName: '',
@@ -61,10 +79,19 @@ class EmployeeForm extends React.Component<IProps, IState> {
   public handleSave = () => {
     const { homebaseOptions, ...empInfo } = this.state;
 
-    Employee.addOne(empInfo)
-      .then(this.handleClose)
-      .then(this.props.refreshTable)
-      .catch();
+    if (this.props.newForm) {
+      Employee.addOne(empInfo)
+        .then(this.handleClose)
+        .then(this.props.refreshTable)
+        .catch();
+    } else {
+      if (this.props.employeeID){
+        Employee.updateOne(this.props.employeeID, empInfo)
+          .then(this.handleClose)
+          .then(this.props.refreshTable)
+          .catch();
+      }
+    }
   }
 
   public handleClose = () => {
@@ -88,7 +115,7 @@ class EmployeeForm extends React.Component<IProps, IState> {
     const { newForm, handleClose, open } = this.props;
     const { homebaseOptions } = this.state;
 
-    const title = newForm ? 'Register New Employee' : null;
+    const title = newForm ? 'Register New Employee' : 'Edit Employee';
     const terminalOptions = homebaseOptions.map((terminal: ITerminal) => (
       <MenuItem value={terminal.id} key={terminal.id}>{terminal.name}</MenuItem>
     ));

@@ -15,6 +15,23 @@ async function findAll() {
   }
 }
 
+async function findOne(empID) {
+  try {
+    let employee = await mysql.pool.query(
+      'SELECT e.id, e.fname, e.lname, h.name homebase, h.id homebase_id, e.start_date ' +
+      'FROM employee e ' +
+      'INNER JOIN terminal h ON h.id = e.home_base_id ' +
+      'WHERE e.id = ?',
+      empID,
+    );
+
+    return employee;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 async function findAllEngineers() {
   try {
     let engineers = await mysql.pool.query(
@@ -115,8 +132,24 @@ async function deleteCertification(empID, certID) {
   }
 }
 
+async function updateOne(empID, empInfo) {
+  const { fName, lName, homeID } = empInfo;
+
+  try {
+    await mysql.pool.query(
+      'UPDATE employee ' +
+      'SET fname = ?, lname = ?, home_base_id = ? ' +
+      'WHERE id = ?',
+      [fName, lName, homeID, empID]
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
 module.exports = {
   findAll,
+  findOne,
   findAllWithCertifications,
   findAllEngineers,
   findAllConductors,
@@ -124,4 +157,5 @@ module.exports = {
   addCertification,
   deleteOne,
   deleteCertification,
+  updateOne,
 };

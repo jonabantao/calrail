@@ -24,7 +24,7 @@ import EmployeeForm from 'src/views/forms/EmployeeForm';
 interface IProps extends WithStyles<typeof dashboardStyles> { }
 
 interface IState {
-  employeeID: string | undefined,
+  employeeID: any,
   employees: IEmployee[],
   loading: boolean,
   newForm: boolean,
@@ -74,11 +74,18 @@ class EmployeeManagement extends React.Component<IProps, IState> {
   }
 
   public handleEdit = (empID: string) => {
-    alert('Under construction!');
+    this.setState({
+      employeeID: empID,
+      newForm: false,
+      openModal: true,
+    });
   }
 
   public handleClose = () => {
-    this.setState({ openModal: false });
+    this.setState({ 
+      employeeID: undefined,
+      openModal: false,
+    });
   }
 
   public render() {
@@ -133,6 +140,7 @@ class EmployeeManagement extends React.Component<IProps, IState> {
           handleClose={this.handleClose}
           newForm={newForm}
           refreshTable={this.fetchAndStoreEmployees}
+          employeeID={this.state.employeeID}
         />
         <EmpCertManagement
           empCount={employeeCount}
