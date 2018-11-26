@@ -26,7 +26,8 @@ import dashboardStyles from 'src/styles/dashboard';
 
 interface IProps extends WithStyles<typeof dashboardStyles> {
   empCount: number;
-  theme: Theme
+  theme: Theme;
+  loading: boolean;
 }
 
 interface IState {
@@ -75,7 +76,7 @@ class EmpCertManagement extends React.Component<IProps, IState> {
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    if (this.props.empCount < prevProps.empCount) {
+    if (this.props.loading && this.props.loading !== prevProps.loading) {
       this.fetchAndStoreEmployeesCerts();
     }
   }

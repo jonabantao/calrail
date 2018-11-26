@@ -144,6 +144,7 @@ class EmployeeManagement extends React.Component<IProps, IState> {
         />
         <EmpCertManagement
           empCount={employeeCount}
+          loading={this.state.loading}
         />
       </React.Fragment>
     );
