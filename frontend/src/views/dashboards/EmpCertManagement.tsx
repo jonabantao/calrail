@@ -106,11 +106,14 @@ class EmpCertManagement extends React.Component<IProps, IState> {
 
   public handleFilterByTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const certTitle = e.target.value;
-    const filteredCerts = this.state.employeesCerts.filter((empCert: IEmployeeCertification) => {
-      return empCert.title === certTitle;
-    });
 
-    this.setState({ certTitle, filteredCerts });
+    this.setState(
+      () => ({ loading: true }),
+      () => Employee.findWithCertificationsByTitle(certTitle)
+        .then(({ data }) => {
+          this.setState({ certTitle, filteredCerts: data, loading: false });
+        })
+    );
   }
 
   public render() {

@@ -82,6 +82,25 @@ async function findAllWithCertifications() {
   }
 }
 
+async function findCertificationsByTitle(title) {
+  try {
+    let employeesWithCertifications = await mysql.pool.query(
+      'SELECT e.id employee_id, CONCAT(e.fname, " ", e.lname) full_name, ' +
+      'c.id certification_id, c.title, ec.certification_date ' +
+      'FROM employee e ' +
+      'INNER JOIN employee_certification ec ON ec.employee_id = e.id ' +
+      'INNER JOIN certification c ON c.id = ec.certification_id ' +
+      'WHERE c.title = ?',
+      title
+    );
+
+    return employeesWithCertifications;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 async function addOne(empInfo) {
   const { fName, lName, homeID, startDate } = empInfo;
 
@@ -151,6 +170,7 @@ module.exports = {
   findAll,
   findOne,
   findAllWithCertifications,
+  findCertificationsByTitle,
   findAllEngineers,
   findAllConductors,
   addOne,

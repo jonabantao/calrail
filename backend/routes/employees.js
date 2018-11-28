@@ -14,7 +14,13 @@ router.get('/', async (req, res) => {
 
 router.get('/certifications', async (req, res) => {
   try {
-    let response = await Employee.findAllWithCertifications();
+    let response;
+
+    if (req.query.title) {
+      response = await Employee.findCertificationsByTitle(req.query.title);
+    } else {
+      response = await Employee.findAllWithCertifications();
+    }
 
     res.status(200).json(response);
   } catch (e) {

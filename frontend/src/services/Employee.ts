@@ -16,6 +16,10 @@ export default class Employee {
     return axios.get('/api/employees/certifications');
   }
 
+  public static findWithCertificationsByTitle = (title: string): AxiosPromise<IEmployeeCertification[]> => {
+    return axios.get(`/api/employees/certifications?title=${title}`);
+  }
+
   public static addOne = (employeeInfo: IFormEmployee): AxiosPromise => {
     return axios.post('/api/employees', employeeInfo);
   }
