@@ -24,7 +24,7 @@ interface IState {
   homeID: string;
   homebaseOptions: ITerminal[],
   lName: string;
-  startDate: string;
+  startDate: any;
 }
 
 interface IProps {
@@ -41,7 +41,7 @@ class EmployeeForm extends React.Component<IProps, IState> {
     homeID: '',
     homebaseOptions: [],
     lName: '',
-    startDate: '',
+    startDate: null,
   };
 
   public componentDidMount() {
@@ -72,7 +72,7 @@ class EmployeeForm extends React.Component<IProps, IState> {
       fName: '',
       homeID: '',
       lName: '',
-      startDate: '',
+      startDate: null,
     })
   }
 
@@ -153,9 +153,11 @@ class EmployeeForm extends React.Component<IProps, IState> {
             {terminalOptions}
           </TextField>
           <DatePicker
+            disabled={!newForm}
             fullWidth={true}
-            keyboard={true}
+            keyboard={newForm}
             label="Start Date"
+            format="MM/DD/YYYY"
             value={this.state.startDate}
             onChange={this.handleDateChange}
             invalidDateMessage="Invalid date"
