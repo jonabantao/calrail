@@ -13,6 +13,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    let response = await Job.findOne(req.params.id);
+
+    res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     await Job.addOne(req.body);
@@ -22,6 +33,17 @@ router.post('/', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+router.patch('/:id', async(req, res) => {
+  try {
+    await Job.updateOne(req.body);
+
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+})
 
 router.delete('/:id', async (req, res) => {
   try {

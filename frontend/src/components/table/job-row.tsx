@@ -7,15 +7,25 @@ import TimeUtil from 'src/utils/time';
 interface IProps extends IJob {
   manageView?: boolean;
   handleDelete?: (jobID: string) => void;
+  handleEdit?: (jobID: string) => void;
+  id: string,
+  train_id: any,
+  engineer: any,
+  conductor: any,
+  assistant_conductor: any,
+  start_station: string,
+  end_station: string,
 }
 
 class TableJobRow extends React.PureComponent<IProps, {}> {
   private signupTime = TimeUtil.formatHours(this.props.signup_time);
   private signoffTime = TimeUtil.formatHours(this.props.signoff_time);
 
-  // public handleEdit = () => {
-  //   this.props.handleEdit(this.props.id);
-  // }
+  public handleEdit = () => {
+    if (this.props.handleEdit) {
+      this.props.handleEdit(this.props.id);
+    }
+  }
 
   public handleDelete = () => {
     if (this.props.handleDelete === undefined) {
@@ -47,6 +57,14 @@ class TableJobRow extends React.PureComponent<IProps, {}> {
         <TableCell>{this.signoffTime}</TableCell>
         {manageView && (
           <TableCell>
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={this.handleEdit}
+              style={{ marginRight: 8 }}
+            >
+              Edit
+            </Button>
             <Button
               color="primary"
               variant="contained"
